@@ -36,7 +36,6 @@ func main() {
 
 	// https://flaviocopes.com/go-list-files/
 	error := filepath.Walk(inputPath, func(path string, info os.FileInfo, err error) error {
-		fmt.Println(path)
 
 		skipDirs := []string{".git", "node_modules", "packages"}
 
@@ -57,6 +56,8 @@ func main() {
 		if filepath.Ext(path) == ".js" {
 			jsFiles = append(jsFiles, path)
 		}
+
+		fmt.Println(path)
 
 		return nil
 	})

@@ -1,6 +1,10 @@
-function createUser() {
+function createUser(_, args) {
+  console.log('args:', args)
+
+  const email = email || 'james@mail.com'
+
   return {
-    email: 'james@mail.com',
+    email,
     password: 'asdfasdf',
   }
 }
