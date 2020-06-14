@@ -4,12 +4,13 @@ import mongoose from 'mongoose'
 import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import resolvers from 'tempo/registerAPI'
 import typeDefs from 'tempo/typeDefs'
+import resolvers from './src/registerAPI'
 
 const envPath = path.join(process.cwd(), '.env')
 dotenv.config({ path: envPath })
 
+// // Uncomment for database
 // const dbUri = process.env.DATABASE_URI
 // mongoose
 //   .connect(dbUri, {

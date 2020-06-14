@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
 )
 
 func main() {
@@ -109,14 +108,14 @@ func main() {
 	// /**
 	//  * Handle JS files
 	//  */
-	for _, file := range jsFiles {
-		if !strings.Contains(file, "registerAPI") && !strings.Contains(file, "typeDefs") && !strings.Contains(file, "scalars") {
-			// DELETE
-			fmt.Println(strings.Split(file, "src")[2])
-		}
+	// for _, file := range jsFiles {
+	// 	if !strings.Contains(file, "registerAPI") && !strings.Contains(file, "typeDefs") && !strings.Contains(file, "scalars") {
+	// 		// DELETE
+	// 		fmt.Println(strings.Split(file, "src")[2])
+	// 	}
 
-		if strings.Contains(file, "scalars") {
-			// Write in the scaler
-		}
-	}
+	// 	if strings.Contains(file, "scalars") {
+	// 		// Write in the scaler
+	// 	}
+	// }
 }
