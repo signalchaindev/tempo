@@ -29,6 +29,7 @@
     "esm": "3.2.25",
     "express": "4.17.1",
     "graphql": "14.6.0",
+    "graphql-tag": "^2.10.3",
     "graphql-toolkit": "0.7.5",
     "lodash": "4.17.15",
     "mongoose": "5.9.9",

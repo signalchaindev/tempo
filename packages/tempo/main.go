@@ -34,9 +34,11 @@ func main() {
 	var sdlFiles []string
 	var jsFiles []string
 
-	// https://flaviocopes.com/go-list-files/
+	/**
+	 * The file chunker
+	 * https://flaviocopes.com/go-list-files/
+	 */
 	error := filepath.Walk(inputPath, func(path string, info os.FileInfo, err error) error {
-
 		skipDirs := []string{".git", "node_modules", "packages"}
 
 		for _, item := range skipDirs {
@@ -56,8 +58,6 @@ func main() {
 		if filepath.Ext(path) == ".js" {
 			jsFiles = append(jsFiles, path)
 		}
-
-		fmt.Println(path)
 
 		return nil
 	})
@@ -84,10 +84,10 @@ func main() {
 
 	var schemaOutput string
 
+	/**
+	 * Read files
+	 */
 	for _, file := range sdlFiles {
-		// sdlFiles = append(sdlFiles, file)
-		// fmt.Println(file)
-
 		// contents of the file input
 		contents, err := ioutil.ReadFile(file)
 		if err != nil {
@@ -104,9 +104,9 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// for _, file := range jsFiles {
-	// 	sdlFiles = append(sdlFiles, file)
-	// 	// fmt.Println(file)
-	// }
+	for _, file := range jsFiles {
+		sdlFiles = append(sdlFiles, file)
+		fmt.Println(file)
+	}
 
 }

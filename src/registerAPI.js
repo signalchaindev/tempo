@@ -2,8 +2,8 @@ import merge from 'lodash/merge'
 import Scalars from './scalars'
 
 // Resolvers
-import createUser from './user/mutation/user.js'
-import allUsers from './user/query/user.js'
+import createUser from './user/mutation/createUser.js'
+import allUsers from './user/query/allUsers.js'
 
 const Resolvers = {
   Mutation: {
