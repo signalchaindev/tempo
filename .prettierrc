@@ -1,0 +1,15 @@
+{
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "printWidth": 80,
+  "semi": false,
+  "singleQuote": true,
+  "spaceBeforeFunctionParen": false,
+  "svelteAllowShorthand": true,
+  "svelteBracketNewLine": true,
+  "svelteSortOrder": "scripts-markup-styles",
+  "svelteStrictMode": false,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "useTabs": false
+}

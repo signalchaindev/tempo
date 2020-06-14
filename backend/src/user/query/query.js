@@ -1,1 +1,0 @@
-console.log('query in query dir')

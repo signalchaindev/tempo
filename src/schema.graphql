@@ -1,0 +1,7 @@
+# Global Schema types
+
+scalar Date
+
+type SuccessMessage {
+  successMessage: String
+}
