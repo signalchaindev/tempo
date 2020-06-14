@@ -1,5 +1,5 @@
 import merge from 'lodash/merge'
-import Scalars from './scalars'
+import Scalars from 'tempo/scalars'
 
 // Resolvers
 import createUser from './user/mutation/createUser.js'

@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 )
 
 func main() {
@@ -85,8 +86,9 @@ func main() {
 	var schemaOutput string
 
 	/**
-	 * Read files
+	 * Read/Write files
 	 */
+	// SDL files
 	for _, file := range sdlFiles {
 		// contents of the file input
 		contents, err := ioutil.ReadFile(file)
@@ -104,9 +106,17 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// /**
+	//  * Handle JS files
+	//  */
 	for _, file := range jsFiles {
-		sdlFiles = append(sdlFiles, file)
-		fmt.Println(file)
-	}
+		if !strings.Contains(file, "registerAPI") && !strings.Contains(file, "typeDefs") && !strings.Contains(file, "scalars") {
+			// DELETE
+			fmt.Println(strings.Split(file, "src")[2])
+		}
 
+		if strings.Contains(file, "scalars") {
+			// Write in the scaler
+		}
+	}
 }

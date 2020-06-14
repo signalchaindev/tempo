@@ -11,27 +11,43 @@ chokidar
     const tempo = path.join(process.cwd(), 'packages', 'tempo')
     const node_modules = path.join(process.cwd(), 'node_modules')
 
-    child_process.execSync(`cp -r ${tempo} ${node_modules}`, cb)
+    // copy packages in packages dir into node modules
+    child_process.execSync(`cp -r ${tempo} ${node_modules}`, function cb(
+      error,
+      stdout,
+      stderr,
+    ) {
+      if (error) {
+        console.error(chalk.red(`Error: ${error.message}`))
+        return
+      }
 
+      if (stderr) {
+        console.error(chalk.red(`Error: ${stderr}`))
+        return
+      }
+
+      // stdout
+      console.log(chalk.blue(stdout))
+    })
+
+    // build executable and run
     child_process.execSync(
-      // copy packages in packages dir into node modules
       'go build && tempo',
       { cwd: `${path.join(node_modules, 'tempo')}` },
-      cb,
+      function cb(error, stdout, stderr) {
+        if (error) {
+          console.error(chalk.red(`Error: ${error.message}`))
+          return
+        }
+
+        if (stderr) {
+          console.error(chalk.red(`Error: ${stderr}`))
+          return
+        }
+
+        // stdout
+        console.log(chalk.blue(stdout))
+      },
     )
   })
-
-const cb = (error, stdout, stderr) => {
-  if (error) {
-    console.error(chalk.red(`Error: ${error.message}`))
-    return
-  }
-
-  if (stderr) {
-    console.error(chalk.red(`Error: ${stderr}`))
-    return
-  }
-
-  // stdout
-  console.log(chalk.blue(stdout))
-}

@@ -4,8 +4,8 @@ import mongoose from 'mongoose'
 import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import resolvers from './src/registerAPI'
-import typeDefs from './src/typeDefs.js'
+import resolvers from 'tempo/registerAPI'
+import typeDefs from 'tempo/typeDefs'
 
 const envPath = path.join(process.cwd(), '.env')
 dotenv.config({ path: envPath })
