@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
 )
 
 func main() {
@@ -113,35 +112,31 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// // DELETE start - check file slice
-	// // for _, item := range sdlFiles {
-	// // 	fmt.Println(item)
-	// // }
-
-	// for _, item := range jsFiles {
-	// 	fmt.Println(item)
-	// }
-	// // DELETE end
-
 	/**
 	 * Read/Write files js files
 	 */
-	for _, file := range jsFiles {
-		isResolver := false
-		if !strings.Contains(file, "registerAPI") && !strings.Contains(file, "typeDefs") && !strings.Contains(file, "scalars") && !strings.Contains(file, "utils") && !strings.Contains(file, "lib") {
-			isResolver = true
-		}
+	// for _, file := range jsFiles {
+	// 	isResolver := false
+	// 	if !strings.Contains(file, "registerAPI") && !strings.Contains(file, "typeDefs") && !strings.Contains(file, "scalars") && !strings.Contains(file, "utils") && !strings.Contains(file, "lib") {
+	// 		isResolver = true
+	// 	}
 
-		if !isResolver {
-			continue
-		}
+	// 	if !isResolver {
+	// 		continue
+	// 	}
 
-		// if strings.Contains(file, "scalars") {
-		// 	// Write in the scaler
-		// }
+	// 	// if strings.Contains(file, "scalars") {
+	// 	// 	// Write in the scaler
+	// 	// }
 
-		// DELETE
-		// fmt.Println(strings.Split(file, "src")[2])
-		fmt.Println(isResolver, file)
-	}
+	// 	// DELETE start - check file is valid resolver
+	// 	// fmt.Println(isResolver)
+	// 	// fmt.Println(file)
+	// 	// DELETE end
+
+	// 	stripFront := fmt.Sprintf("%s", strings.Split(file, "src")[:2][1])
+	// 	path := fmt.Sprintf("../..%s", filepath.Join(stripFront))
+
+	// 	fmt.Println(path)
+	// }
 }
