@@ -125,19 +125,17 @@ func main() {
 	// 		continue
 	// 	}
 
-	// 	// if strings.Contains(file, "scalars") {
-	// 	// 	// Write in the scaler
-	// 	// }
+	// 	if strings.Contains(file, "scalars") {
+	// 		// Write in the scaler
+	// 	}
 
-	// 	stripFront := fmt.Sprintf("%s", strings.Split(file, "src")[:2][1])
-
-	// 	path := fmt.Sprintf("%s", filepath.Join(stripFront))
+	// 	path := fmt.Sprintf("%s", strings.Split(file, "src")[:2][1])
 	// 	dir, file := filepath.Split(path)
 	// 	// dirName := file.Join
 	// 	functionName := strings.TrimSuffix(file, filepath.Ext(file))
 
 	// 	//DELETE
-	// 	fmt.Printf("\ninput: %q\n\tdir: %q\n\tfile: %q\n\tfunction: %q\n", path, dir, file, functionName)
+	// 	fmt.Printf("\npath: %q\ndir: %q\nfile: %q\nfunction: %q\n", path, dir, file, functionName)
 	// 	//DELETE
 	// }
 }
