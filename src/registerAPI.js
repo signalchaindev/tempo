@@ -4,6 +4,7 @@ import Scalars from 'tempo/scalars'
 // Resolvers
 import createUser from './user/mutation/createUser.js'
 import allUsers from './user/query/allUsers.js'
+import singleUser from './user/query/singleUser.js'
 
 const Resolvers = {
   Mutation: {
@@ -11,6 +12,7 @@ const Resolvers = {
   },
   Query: {
     allUsers,
+    singleUser,
   },
 }
 

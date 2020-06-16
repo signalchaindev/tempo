@@ -1,8 +1,6 @@
+import { User } from '../model.js'
+
 export default function allUsers() {
-  return [
-    {
-      email: 'james@mail.com',
-      password: 'asdfasdf',
-    },
-  ]
+  const users = User.find()
+  return users
 }

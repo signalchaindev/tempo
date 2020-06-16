@@ -10,16 +10,15 @@ import resolvers from './src/registerAPI'
 const envPath = path.join(process.cwd(), '.env')
 dotenv.config({ path: envPath })
 
-// // Uncomment for database
-// const dbUri = process.env.DATABASE_URI
-// mongoose
-//   .connect(dbUri, {
-//     useCreateIndex: true,
-//     useUnifiedTopology: true,
-//     useNewUrlParser: true,
-//   })
-//   .then(() => console.log('Database connected\n'))
-//   .catch(err => console.error(`\n\nMongoose Error: \n${err}\n\n`))
+const dbUri = process.env.DATABASE_URI
+mongoose
+  .connect(dbUri, {
+    useCreateIndex: true,
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+  })
+  .then(() => console.log('Database connected\n'))
+  .catch(err => console.error(`\n\nMongoose Error: \n${err}\n\n`))
 
 const app = express()
 const dev = process.env.NODE_ENV === 'development'

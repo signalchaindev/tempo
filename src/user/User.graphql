@@ -6,9 +6,18 @@ type Mutation {
 
 type Query {
   allUsers: [User]
+  singleUser(email: String!): User
 }
 
 type User {
+  name: String
   email: String
   password: String
+  Permission: Permission
+}
+
+enum Permission {
+  USER
+  ADMIN
+  SUPER_ADMIN
 }
