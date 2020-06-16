@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import child_process from 'child_process'
 
 const tempo = path.join(process.cwd(), 'packages', 'tempo')
-const node_modules = path.join(process.cwd(), 'node_modules')
+const modules = path.join(process.cwd(), 'node_modules')
 
 chokidar
   .watch(['./**/*.graphql', './packages/tempo/**/*', '!./__tempo__'])
@@ -12,12 +12,12 @@ chokidar
     console.log(chalk.blue(`\n[watcher] Change in ${event}\n`))
 
     // copy packages in packages dir into node modules
-    child_process.execSync(`cp -r ${tempo} ${node_modules}`, cb)
+    child_process.execSync(`cp -r ${tempo} ${modules}`, cb)
 
     // build executable and run
     child_process.execSync(
       'go build && tempo',
-      { cwd: `${path.join(node_modules, 'tempo')}` },
+      { cwd: `${path.join(modules, 'tempo')}` },
       cb,
     )
   })

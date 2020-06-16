@@ -134,8 +134,9 @@ func main() {
 	// 	// dirName := file.Join
 	// 	functionName := strings.TrimSuffix(file, filepath.Ext(file))
 
-	// 	//DELETE
+	// 	// DELETE - log path assets
+	// 	// TODO: figure out how to write register api
 	// 	fmt.Printf("\npath: %q\ndir: %q\nfile: %q\nfunction: %q\n", path, dir, file, functionName)
-	// 	//DELETE
+	// 	// DELETE
 	// }
 }
