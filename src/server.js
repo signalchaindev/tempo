@@ -4,8 +4,8 @@ import mongoose from 'mongoose'
 import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import typeDefs from 'tempo/typeDefs'
-import resolvers from 'tempo/registerAPI'
+import typeDefs from '../__tempo__/typeDefs'
+import resolvers from '../__tempo__/registerAPI'
 
 const envPath = path.join(process.cwd(), '.env')
 dotenv.config({ path: envPath })
@@ -54,10 +54,8 @@ graphQLServer.applyMiddleware({
 
 // Start app
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const startMsg = `
-🚀 API ready:
-Frontend: ${frontendUrl}
-Playground: ${gqlServerEndpoint}/${gqlServerPath}`
+const startMsg = `[frontend] ${frontendUrl}
+[playground] ${gqlServerEndpoint}/${gqlServerPath}`
 
 app.listen({ port }, err => {
   if (err) {

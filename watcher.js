@@ -3,8 +3,10 @@ import chokidar from 'chokidar'
 import chalk from 'chalk'
 import child_process from 'child_process'
 
-const tempo = path.join(process.cwd(), 'packages', 'tempo')
-const modules = path.join(process.cwd(), 'node_modules')
+const root = path.join(process.cwd())
+const tempoDevEnv = path.join(process.cwd(), 'packages', 'tempo')
+const nodeModules = path.join(process.cwd(), 'node_modules')
+const tempo = path.join(process.cwd(), 'node_modules', 'tempo')
 
 chokidar
   .watch(['./**/*.graphql', './packages/tempo/**/*', '!./__tempo__'])
@@ -12,16 +14,23 @@ chokidar
     console.log(chalk.blue(`[tempo] Change in ${event}`))
 
     // copy packages in packages dir into node modules
-    child_process.execSync(`cp -r ${tempo} ${modules}`, cb)
+    if (process.env.NODE_ENV === 'development') {
+      child_process.execSync(`cp -r ${tempoDevEnv} ${nodeModules}`, cb)
+    }
 
-    // build executable and run
+    // Write type defs from node modules to __tempo__
     child_process.execSync(
-      'go build && tempo',
-      { cwd: `${path.join(modules, 'tempo')}` },
+      `cp -r ${tempo}/typeDefs.js ${root}/__tempo__/typeDefs.js`,
       cb,
     )
+
+    // build executable and run
+    child_process.execSync('go build && tempo', { cwd: tempo }, cb)
   })
 
+/**
+ * Callback for errors and stdout
+ */
 function cb(error, stdout, stderr) {
   if (error) {
     console.error(chalk.red(`Error: ${error.message}`))
