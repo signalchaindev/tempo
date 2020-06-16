@@ -7,15 +7,17 @@
     "type": "git",
     "url": "git+https://github.com/signalchainio/tempo.git"
   },
-  "keywords": [],
+  "keywords": [
+    "graphql"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/signalchainio/tempo/issues"
   },
   "scripts": {
     "dev": "run-p --race api watch",
-    "api": "nodemon -e js,graphql -r esm server.js",
+    "api": "nodemon -e js,graphql -r esm src/server.js",
     "watch": "cross-env NODE_ENV=development nodemon -r esm watcher.js --watch src/**/*.graphql",
     "clean": "rm -r __tempo__",
     "test": "echo \"Error: no test specified\" && exit 1"

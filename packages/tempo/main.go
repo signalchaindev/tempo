@@ -112,12 +112,21 @@ func main() {
 		log.Fatal(err)
 	}
 
-	/**
-	 * Read/Write files js files
-	 */
+	// //* Below is code for registerAPI and is a [WIP]
+	// //* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	// /**
+	//  * Query and mutation slices
+	//  */
+	// mutation := []string{}
+	// query := []string{}
+
+	// /**
+	//  * Read JS files and store them to slices
+	//  */
 	// for _, file := range jsFiles {
+	// 	// TODO: instead of excluding things that aren't resolvers, just get the resolvers
 	// 	isResolver := false
-	// 	if !strings.Contains(file, "registerAPI") && !strings.Contains(file, "typeDefs") && !strings.Contains(file, "scalars") && !strings.Contains(file, "utils") && !strings.Contains(file, "lib") && !strings.Contains(file, "model") {
+	// 	if !strings.Contains(file, "registerAPI") && !strings.Contains(file, "typeDefs") && !strings.Contains(file, "scalars") && !strings.Contains(file, "utils") && !strings.Contains(file, "lib") && !strings.Contains(file, "model") && !strings.Contains(file, "server") {
 	// 		isResolver = true
 	// 	}
 
@@ -129,10 +138,22 @@ func main() {
 	// 		// Write in the scaler
 	// 	}
 
+	// 	/**
+	// 	 * Split mutations and queries into there own slices
+	// 	 */
+
 	// 	path := fmt.Sprintf("%s", strings.Split(file, "src")[:2][1])
 	// 	dir, file := filepath.Split(path)
 	// 	// dirName := file.Join
 	// 	functionName := strings.TrimSuffix(file, filepath.Ext(file))
+
+	// 	if strings.Contains(file, "mutation") {
+	// 		mutation = append(mutation, path)
+	// 	}
+
+	// 	if strings.Contains(file, "query") {
+	// 		query = append(query, path)
+	// 	}
 
 	// 	// DELETE - log path assets
 	// 	// TODO: figure out how to write register api
