@@ -117,7 +117,7 @@ func main() {
 	 */
 	// for _, file := range jsFiles {
 	// 	isResolver := false
-	// 	if !strings.Contains(file, "registerAPI") && !strings.Contains(file, "typeDefs") && !strings.Contains(file, "scalars") && !strings.Contains(file, "utils") && !strings.Contains(file, "lib") {
+	// 	if !strings.Contains(file, "registerAPI") && !strings.Contains(file, "typeDefs") && !strings.Contains(file, "scalars") && !strings.Contains(file, "utils") && !strings.Contains(file, "lib") && !strings.Contains(file, "model") {
 	// 		isResolver = true
 	// 	}
 
@@ -129,14 +129,15 @@ func main() {
 	// 	// 	// Write in the scaler
 	// 	// }
 
-	// 	// DELETE start - check file is valid resolver
-	// 	// fmt.Println(isResolver)
-	// 	// fmt.Println(file)
-	// 	// DELETE end
-
 	// 	stripFront := fmt.Sprintf("%s", strings.Split(file, "src")[:2][1])
-	// 	path := fmt.Sprintf("../..%s", filepath.Join(stripFront))
 
-	// 	fmt.Println(path)
+	// 	path := fmt.Sprintf("%s", filepath.Join(stripFront))
+	// 	dir, file := filepath.Split(path)
+	// 	// dirName := file.Join
+	// 	functionName := strings.TrimSuffix(file, filepath.Ext(file))
+
+	// 	//DELETE
+	// 	fmt.Printf("\ninput: %q\n\tdir: %q\n\tfile: %q\n\tfunction: %q\n", path, dir, file, functionName)
+	// 	//DELETE
 	// }
 }
