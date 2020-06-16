@@ -9,7 +9,7 @@ const modules = path.join(process.cwd(), 'node_modules')
 chokidar
   .watch(['./**/*.graphql', './packages/tempo/**/*', '!./__tempo__'])
   .on('change', event => {
-    console.log(chalk.blue(`\n[watcher] Change in ${event}\n`))
+    console.log(chalk.blue(`[tempo] Change in ${event}`))
 
     // copy packages in packages dir into node modules
     child_process.execSync(`cp -r ${tempo} ${modules}`, cb)
