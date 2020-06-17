@@ -152,8 +152,6 @@ func main() {
 	 * Build imports
 	 */
 	var output = ""
-	var mutation = []string{}
-	var query = []string{}
 
 	for functionName, path := range resolvers {
 		imports := fmt.Sprintf("import %s from \"../src%s\";\n", functionName, filepath.ToSlash(path))
@@ -161,15 +159,21 @@ func main() {
 		output = output + imports
 	}
 
+	// DELETE
 	fmt.Println(output)
+	// DELETE
+
+	var mutation = ""
+	var query = ""
 
 	for functionName, path := range resolvers {
+
 		if strings.Contains(path, "mutation") {
-			mutation = append(mutation, functionName)
+			mutation = mutation + functionName + ", "
 		}
 
 		if strings.Contains(path, "query") {
-			query = append(query, functionName)
+			query = query + functionName + ", "
 		}
 	}
 
