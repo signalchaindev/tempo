@@ -6,6 +6,8 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import typeDefs from '../__tempo__/typeDefs'
 import resolvers from '../__tempo__/registerAPI'
+import scalar from './scalars'
+const Date = scalar.Date
 
 const envPath = path.join(process.cwd(), '.env')
 dotenv.config({ path: envPath })
@@ -24,7 +26,6 @@ const app = express()
 const dev = process.env.NODE_ENV === 'development'
 const port = parseInt(process.env.PORT) || 3001
 const frontendUrl = process.env.FRONTEND_URL
-const wwwFrontendUrl = process.env.WWW_FRONTEND_URL
 const gqlServerEndpoint = process.env.GQL_SERVER_ENDPOINT_BASE
 const gqlServerPath = process.env.GQL_SERVER_PATH
 
@@ -40,7 +41,10 @@ app.use(cors(corsOptions))
 
 const graphQLServer = new ApolloServer({
   typeDefs,
-  resolvers,
+  resolvers: {
+    ...resolvers,
+    Date,
+  },
   context: ({ req, res }) => {
     return { req, res }
   },
