@@ -173,12 +173,12 @@ func main() {
 		}
 	}
 
-	// DELETE - log path assets
-	// TODO: figure out how to write register api
-	fmt.Printf("function: %s\n", mutation)
-	fmt.Printf("function: %s\n", query)
-	// DELETE
+	// DELETE - log resolvers
+	// TODO: figure out how to write resolver map
+	mutationMap := fmt.Sprintf("%s\n", mutation)
+	queryMap := fmt.Sprintf("%s\n", query)
 
-	// fmt.Println(mutation)
-	// fmt.Println(query)
+	fmt.Println(mutationMap)
+	fmt.Println(queryMap)
+	// DELETE
 }
