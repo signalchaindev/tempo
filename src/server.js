@@ -7,6 +7,7 @@ import dotenv from 'dotenv'
 import typeDefs from '../__tempo__/typeDefs.js'
 import resolvers from '../__tempo__/registerAPI.js'
 import scalar from './scalars'
+
 const Date = scalar.Date
 
 const envPath = path.join(process.cwd(), '.env')

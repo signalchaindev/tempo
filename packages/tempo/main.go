@@ -143,7 +143,6 @@ func main() {
 		 */
 		path := fmt.Sprintf("%s", strings.Split(file, "src")[:2][1])
 		_, file := filepath.Split(path)
-		// dirName := file.Join
 		functionName := strings.TrimSuffix(file, filepath.Ext(file))
 		resolvers[functionName] = filepath.ToSlash(path)
 	}
