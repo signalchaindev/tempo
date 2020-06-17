@@ -16,12 +16,6 @@ chokidar
     // copy packages in packages dir into node modules
     if (process.env.NODE_ENV === 'development') {
       child_process.execSync(`cp -r ${tempoDevEnv} ${nodeModules}`, cb)
-
-      // Remove after registerAPI generation is complete
-      child_process.execSync(
-        `cp -r ${tempo}/registerAPI.js ${root}/__tempo__/registerAPI.js`,
-        cb,
-      )
     }
 
     // Write type defs from node modules to __tempo__

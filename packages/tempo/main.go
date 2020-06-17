@@ -151,17 +151,13 @@ func main() {
 	/**
 	 * Build imports
 	 */
-	var output = ""
+	var importsOutput = ""
 
 	for functionName, path := range resolvers {
 		imports := fmt.Sprintf("import %s from \"../src%s\";\n", functionName, filepath.ToSlash(path))
 
-		output = output + imports
+		importsOutput = importsOutput + imports
 	}
-
-	// DELETE
-	fmt.Println(output)
-	// DELETE
 
 	var mutation = ""
 	var query = ""
@@ -177,12 +173,17 @@ func main() {
 		}
 	}
 
-	// DELETE - log resolvers
-	// TODO: figure out how to write resolver map
 	mutationMap := fmt.Sprintf("%s\n", mutation)
 	queryMap := fmt.Sprintf("%s\n", query)
+	resolverMap := fmt.Sprintf("%s\nconst resolvers = {\n\tMutation: {\n\t\t%s\t},\n\tQuery: {\n\t\t%s\t},\n}\n\nexport default resolvers;", importsOutput, mutationMap, queryMap)
 
-	fmt.Println(mutationMap)
-	fmt.Println(queryMap)
-	// DELETE
+	registerAPIOutputPath, err := filepath.Abs(path.Join(buildDir, "registerAPI.js"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = ioutil.WriteFile(registerAPIOutputPath, []byte(resolverMap), 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

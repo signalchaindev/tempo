@@ -4,8 +4,8 @@ import mongoose from 'mongoose'
 import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import typeDefs from '../__tempo__/typeDefs'
-import resolvers from '../__tempo__/registerAPI'
+import typeDefs from '../__tempo__/typeDefs.js'
+import resolvers from '../__tempo__/registerAPI.js'
 import scalar from './scalars'
 const Date = scalar.Date
 
