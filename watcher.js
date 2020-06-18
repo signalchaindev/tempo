@@ -1,12 +1,13 @@
+import fs from 'fs'
 import path from 'path'
 import chokidar from 'chokidar'
 import chalk from 'chalk'
 import child_process from 'child_process'
 
-const root = path.join(process.cwd())
 const tempoDevEnv = path.join(process.cwd(), 'packages', 'tempo')
 const nodeModules = path.join(process.cwd(), 'node_modules')
 const tempo = path.join(process.cwd(), 'node_modules', 'tempo')
+const buildDir = path.join(process.cwd(), '__tempo__')
 
 chokidar
   .watch(['./**/*.graphql', './packages/tempo/**/*', '!./__tempo__'])
@@ -15,12 +16,19 @@ chokidar
 
     // copy packages in packages dir into node modules
     if (process.env.NODE_ENV === 'development') {
-      child_process.execSync(`cp -r ${tempoDevEnv} ${nodeModules}`, cb)
+      child_process.execSync(`cp -rf ${tempoDevEnv} ${nodeModules}`, cb)
+    }
+
+    if (!fs.existsSync(buildDir)) {
+      fs.mkdirSync(buildDir)
     }
 
     // Write type defs from node modules to __tempo__
     child_process.execSync(
-      `cp -r ${tempo}/typeDefs.js ${root}/__tempo__/typeDefs.js`,
+      `cp -rf ${path.join(tempo, 'typeDefs.js')} ${path.join(
+        buildDir,
+        'typeDefs.js',
+      )}`,
       cb,
     )
 
