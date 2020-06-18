@@ -10,7 +10,12 @@ const tempo = path.join(process.cwd(), 'node_modules', 'tempo')
 const buildDir = path.join(process.cwd(), '__tempo__')
 
 chokidar
-  .watch(['./**/*.graphql', './packages/tempo/**/*', '!./__tempo__'])
+  .watch([
+    './**/*.graphql',
+    './src/**/*.js',
+    './packages/tempo/**/*',
+    '!./__tempo__',
+  ])
   .on('change', event => {
     console.log(chalk.blue(`[tempo] Change in ${event}`))
 
