@@ -17,18 +17,7 @@ module.exports = {
     caches: true,
     fetch: true,
   },
-  plugins: ['svelte3', 'graphql', 'json'],
-  overrides: [
-    {
-      files: ['**/*.svelte'],
-      processor: 'svelte3/svelte3',
-    },
-  ],
-  settings: {
-    'svelte3/ignore-styles': attributes =>
-      attributes.lang && attributes.lang.includes('scss'),
-    // 'svelte3/ignore-warnings': ({ code }) => code === 'missing-declaration',
-  },
+  plugins: ['graphql', 'json'],
   rules: {
     camelcase: 0,
     'comma-dangle': 0,
