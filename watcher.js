@@ -7,38 +7,49 @@ import child_process from 'child_process'
 const tempoDevEnv = path.join(process.cwd(), 'packages', 'tempo')
 const nodeModules = path.join(process.cwd(), 'node_modules')
 const tempo = path.join(process.cwd(), 'node_modules', 'tempo')
-const buildDir = path.join(process.cwd(), '__tempo__')
 
+function run() {
+  if (!fs.existsSync(tempo)) {
+    fs.mkdirSync(tempo)
+  }
+
+  child_process.execSync('go build && tempo', { cwd: tempo }, cb)
+}
+
+/**
+ * Write type defs from node modules to __tempo__
+ */
 chokidar
-  .watch([
-    './**/*.graphql',
-    './src/**/*.js',
-    './packages/tempo/**/*',
-    '!./__tempo__',
-  ])
+  .watch('.', {
+    ignored: /__tempo__|node_modules/,
+  })
+  .on('ready', () => {
+    run()
+  })
+
+/**
+ * build executable and run
+ */
+chokidar
+  .watch('./src/**/*.js', {
+    ignored: /__tempo__|node_modules/,
+  })
   .on('change', event => {
     console.log(chalk.blue(`[tempo] Change in ${event}`))
+    run()
+  })
 
-    // copy packages in packages dir into node modules
-    if (process.env.NODE_ENV === 'development') {
-      child_process.execSync(`cp -rf ${tempoDevEnv} ${nodeModules}`, cb)
-    }
-
-    if (!fs.existsSync(buildDir)) {
-      fs.mkdirSync(buildDir)
-    }
-
-    // Write type defs from node modules to __tempo__
-    child_process.execSync(
-      `cp -rf ${path.join(tempo, 'typeDefs.js')} ${path.join(
-        buildDir,
-        'typeDefs.js',
-      )}`,
-      cb,
-    )
-
-    // build executable and run
-    child_process.execSync('go build && tempo', { cwd: tempo }, cb)
+/**
+ * copy packages in packages dir into node modules
+ */
+chokidar
+  .watch('./packages/tempo/**/*', {
+    ignored: /__tempo__|node_modules/,
+  })
+  .on('change', event => {
+    console.log(chalk.blue(`[tempo] Change in ${event}`))
+    child_process.execSync(`cp -rf ${tempoDevEnv} ${nodeModules}`, cb)
+    run()
   })
 
 /**

@@ -4,9 +4,9 @@ import mongoose from 'mongoose'
 import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import typeDefs from '../__tempo__/typeDefs.js'
-import resolvers from '../__tempo__/registerAPI.js'
 import scalar from './scalars'
+import typeDefs from 'tempo/typeDefs.js'
+import resolvers from '../__tempo__/registerAPI.js'
 
 const Date = scalar.Date
 
@@ -26,7 +26,6 @@ mongoose
 const app = express()
 const dev = process.env.NODE_ENV === 'development'
 const port = parseInt(process.env.PORT) || 3001
-const frontendUrl = process.env.FRONTEND_URL
 const gqlServerEndpoint = process.env.GQL_SERVER_ENDPOINT_BASE
 const gqlServerPath = process.env.GQL_SERVER_PATH
 
@@ -59,8 +58,6 @@ graphQLServer.applyMiddleware({
 
 // Start app
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const startMsg = `[frontend] ${frontendUrl}
-[playground] ${gqlServerEndpoint}/${gqlServerPath}`
 
 app.listen({ port }, err => {
   if (err) {
@@ -68,5 +65,5 @@ app.listen({ port }, err => {
     console.error(err.stack)
     process.exit(1)
   }
-  dev && console.log(startMsg)
+  dev && console.log(`[playground] ${gqlServerEndpoint}/${gqlServerPath}`)
 })
