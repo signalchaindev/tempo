@@ -73,7 +73,7 @@ func main() {
 	/**
 	 * Define build to directory
 	 */
-	buildDir, err := filepath.Abs(path.Join(root, "__tempo__"))
+	buildDir, err := filepath.Abs(path.Join(root, "node_modules", "tempo"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -153,7 +153,7 @@ func main() {
 	var importsOutput = ""
 
 	for functionName, path := range resolvers {
-		imports := fmt.Sprintf("import %s from \"../src%s\";\n", functionName, filepath.ToSlash(path))
+		imports := fmt.Sprintf("import %s from \"../../src%s\";\n", functionName, filepath.ToSlash(path))
 
 		importsOutput = importsOutput + imports
 	}

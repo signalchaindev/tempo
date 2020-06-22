@@ -3,7 +3,7 @@ import path from 'path'
 import { mergeTypeDefs } from 'graphql-toolkit'
 
 export default loadGQLFiles({
-  src: '__tempo__',
+  src: 'node_modules/tempo',
   files: ['/schema.graphql'],
 })
 

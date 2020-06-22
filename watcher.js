@@ -17,22 +17,22 @@ function run() {
 }
 
 /**
- * Write type defs from node modules to __tempo__
+ * Initialize on process start
  */
 chokidar
   .watch('.', {
-    ignored: /__tempo__|node_modules/,
+    ignored: /node_modules/,
   })
   .on('ready', () => {
     run()
   })
 
 /**
- * build executable and run
+ * Build and run on src file change
  */
 chokidar
-  .watch('./src/**/*.js', {
-    ignored: /__tempo__|node_modules/,
+  .watch(['./src/**/*.js', './src/**/*.graphql'], {
+    ignored: /node_modules/,
   })
   .on('change', event => {
     console.log(chalk.blue(`[tempo] Change in ${event}`))
@@ -40,11 +40,12 @@ chokidar
   })
 
 /**
- * copy packages in packages dir into node modules
+ * Copy packages in packages dir into node modules (for local dev)
+ * TODO: Find a better dev workflow
  */
 chokidar
   .watch('./packages/tempo/**/*', {
-    ignored: /__tempo__|node_modules/,
+    ignored: /node_modules/,
   })
   .on('change', event => {
     console.log(chalk.blue(`[tempo] Change in ${event}`))

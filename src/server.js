@@ -6,7 +6,7 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import scalar from './scalars'
 import typeDefs from 'tempo/typeDefs.js'
-import resolvers from '../__tempo__/registerAPI.js'
+import resolvers from 'tempo/registerAPI.js'
 
 const Date = scalar.Date
 
