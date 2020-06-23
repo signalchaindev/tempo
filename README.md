@@ -6,9 +6,9 @@ A Node Graphql framework.
 
 ## FYI
 
-- Filenames cannot be repeated
+- Sometimes in a new project you have to copy paste the tempo directory into `node_modules` manually to kick start it (copy example for bare bones starting point)
 
-- Sometimes in a new project you have to copy paste the tempo directory into `node_modules` manually to kick start it
+- Filenames cannot be repeated
 
 ex. if you have a `hello.js` query file, you can not have a `hello.js` mutation file
 
@@ -43,3 +43,13 @@ import resolvers from 'tempo/registerAPI.js'
 ```
 
 Run with `npm run dev`
+
+## The magic
+
+A folder in the root of the `src` directory denotes a collection of like functionality
+
+That file should have a `query` directory and/or a `mutation` directory. Typically schema (`*.graphql`) files live in the root of a collection directory.
+
+Files in the `query` or `mutation` folders should have one default exported function the same name as the file. These are your resolvers and automatically receive `parent, args, context, info` as params, as you would expect any other graphql resolver to have.
+
+TODO: setup export command to allow custom setup
