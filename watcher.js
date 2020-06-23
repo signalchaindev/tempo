@@ -68,5 +68,5 @@ function cb(error, stdout, stderr) {
   }
 
   // stdout
-  console.log(chalk.blue(stdout))
+  console.log(stdout)
 }
