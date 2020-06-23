@@ -151,9 +151,10 @@ func main() {
 	 * Build imports
 	 */
 	var importsOutput = ""
+	var relativeRoot = "../../"
 
 	for functionName, path := range resolvers {
-		imports := fmt.Sprintf("import %s from \"../../src%s\";\n", functionName, filepath.ToSlash(path))
+		imports := fmt.Sprintf("import %s from \"%ssrc%s\";\n", functionName, relativeRoot, filepath.ToSlash(path))
 
 		importsOutput = importsOutput + imports
 	}
