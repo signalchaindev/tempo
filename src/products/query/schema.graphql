@@ -1,0 +1,8 @@
+query {
+  getAllProducts: [Product]
+}
+
+type Product {
+  name: String
+  price: String
+}
