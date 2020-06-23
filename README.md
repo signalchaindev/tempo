@@ -48,7 +48,7 @@ Run with `npm run dev`
 
 A folder in the root of the `src` directory denotes a collection of like functionality
 
-That file should have a `query` directory and/or a `mutation` directory. Typically schema (`*.graphql`) files live in the root of a collection directory.
+That folder should have a `query` directory and/or a `mutation` directory. Typically schema (`*.graphql`) files live in the root of a collection directory. No need to extend repeated types.
 
 Files in the `query` or `mutation` folders should have one default exported function the same name as the file. These are your resolvers and automatically receive `parent, args, context, info` as params, as you would expect any other graphql resolver to have.
 
