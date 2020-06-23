@@ -4,7 +4,7 @@ A Node Graphql framework.
 
 [WIP]
 
-FYI - Filenames can not be repeated
+FYI - Filenames cannot be repeated
 
 ex. if you have a `hello.js` query file, you can not have a `hello.js` mutation file
 
