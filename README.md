@@ -4,7 +4,11 @@ A Node Graphql framework.
 
 [WIP]
 
-FYI - Filenames cannot be repeated
+## FYI
+
+- Filenames cannot be repeated
+
+- Sometimes in a new project you have to copy paste the tempo directory into `node_modules` manually to kick start it
 
 ex. if you have a `hello.js` query file, you can not have a `hello.js` mutation file
 
@@ -17,6 +21,8 @@ ex. if you have a `hello.js` query file, you can not have a `hello.js` mutation 
 1. Copy the `watcher.js` file into the root directory
 
 1. Copy the `packages/tempo` directory into the root directory
+
+1. Write you SDL schema or schemas in the `src` dir
 
 1. Make sure you are importing you typeDefs and resolvers from the tempo package
 
