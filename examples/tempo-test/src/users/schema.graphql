@@ -1,0 +1,12 @@
+type Mutation {
+  createUser: String
+}
+
+type Query {
+  getAllUsers: [User]
+}
+
+type User {
+  name: String
+  email: String
+}
