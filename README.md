@@ -4,6 +4,23 @@ A Node Graphql framework.
 
 [WIP]
 
+## Know issues
+
+Currently dumps:
+
+```js
+C:\Projects\signalchain\code\packages\tempo\node_modules\esm\esm.js:1
+const __global__ = this;
+
+...
+
+GraphQLError: Syntax Error: Expected Name, found [
+
+...
+```
+
+It is unknown what triggers this error.
+
 ## FYI
 
 - Sometimes in a new project you have to copy paste the tempo directory into `node_modules` manually to kick start it (copy example for bare bones starting point)
