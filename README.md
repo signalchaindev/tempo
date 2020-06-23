@@ -16,7 +16,7 @@ ex. if you have a `hello.js` query file, you can not have a `hello.js` mutation 
 
 1. Copy the `watcher.js` file into the root directory
 
-1. Copy the packages directory into the root directory
+1. Copy the `packages/tempo` directory into the root directory
 
 1. Make sure you are importing you typeDefs and resolvers from the tempo package
 
