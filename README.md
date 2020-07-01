@@ -4,7 +4,7 @@ A Node Graphql framework.
 
 [WIP]
 
-## Know issues
+## Know issues (*fixed with the removal of esm package)
 
 Currently dumps:
 
@@ -19,11 +19,11 @@ GraphQLError: Syntax Error: Expected Name, found [
 ...
 ```
 
-It is unknown what triggers this error.
+It is unknown what triggers this error. Typically only happens when the application grows beyond a third service directory.
 
 ## FYI
 
-- Sometimes in a new project you have to copy paste the tempo directory into `node_modules` manually to kick start it (copy example for bare bones starting point)
+- Sometimes in a new project you have to copy paste the tempo directory into `node_modules` manually to kick start it
 
 - Filenames cannot be repeated
 
@@ -53,8 +53,8 @@ import resolvers from 'tempo/registerAPI.js'
 ```js
 "scripts": {
   "dev": "run-p --race api watch",
-  "api": "nodemon -e js,graphql -r esm src/server.js",
-  "watch": "cross-env NODE_ENV=development nodemon -r esm watcher.js --watch src/**/*.graphql",
+  "api": "nodemon -e js,graphql src/server.js",
+  "watch": "cross-env NODE_ENV=development nodemon watcher.js --watch src/**/*.graphql",
   "test": "echo \"Error: no test specified\" && exit 1"
 }
 ```
