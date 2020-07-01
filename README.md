@@ -1,6 +1,6 @@
 # Tempo (name suggestions welcome. Tempo is taken on NPM)
 
-A Node Graphql framework.
+A Node Graphql framework. That uses Golang to create a resolver map and concatenate the SDL from GraphQL files into a useable schema for JavaScript APIs.
 
 [WIP]
 
