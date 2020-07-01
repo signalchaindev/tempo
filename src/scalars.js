@@ -1,7 +1,7 @@
-import { GraphQLScalarType } from 'graphql'
-import { Kind } from 'graphql/language'
+const { GraphQLScalarType } = require('graphql')
+const { Kind } = require('graphql/language')
 
-export default {
+module.exports = {
   Date: new GraphQLScalarType({
     name: 'Date',
     description: 'Date custom scalar',

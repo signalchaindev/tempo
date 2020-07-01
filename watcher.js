@@ -1,8 +1,8 @@
-import fs from 'fs'
-import path from 'path'
-import chokidar from 'chokidar'
-import chalk from 'chalk'
-import child_process from 'child_process'
+const fs = require('fs')
+const path = require('path')
+const chokidar = require('chokidar')
+const chalk = require('chalk')
+const child_process = require('child_process')
 
 const tempoDevEnv = path.join(process.cwd(), 'packages', 'tempo')
 const nodeModules = path.join(process.cwd(), 'node_modules')

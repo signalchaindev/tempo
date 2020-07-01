@@ -1,3 +1,3 @@
-export default function createUser() {
+module.exports = function createUser() {
   return 'Success!'
 }

@@ -174,7 +174,7 @@ func main() {
 
 	mutationMap := fmt.Sprintf("%s\n", mutation)
 	queryMap := fmt.Sprintf("%s\n", query)
-	resolverMap := fmt.Sprintf("%s\nconst resolvers = {\n\tMutation: {\n\t\t%s\t},\n\tQuery: {\n\t\t%s\t},\n}\n\nexport default resolvers;", importsOutput, mutationMap, queryMap)
+	resolverMap := fmt.Sprintf("%s\nconst resolvers = {\n\tMutation: {\n\t\t%s\t},\n\tQuery: {\n\t\t%s\t},\n}\n\nmodule.exports = resolvers;", importsOutput, mutationMap, queryMap)
 
 	registerAPIOutputPath, err := filepath.Abs(path.Join(buildDir, "registerAPI.js"))
 	if err != nil {

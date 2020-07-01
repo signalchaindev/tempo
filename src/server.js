@@ -1,12 +1,12 @@
-import path from 'path'
-import express from 'express'
-import mongoose from 'mongoose'
-import { ApolloServer } from 'apollo-server-express'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import scalar from './scalars'
-import typeDefs from 'tempo/typeDefs.js'
-import resolvers from 'tempo/registerAPI.js'
+const path = require('path')
+const express = require('express')
+const mongoose = require('mongoose')
+const { ApolloServer } = require('apollo-server-express')
+const cors = require('cors')
+const dotenv = require('dotenv')
+const scalar = require('./scalars')
+const typeDefs = require('tempo/typeDefs.js')
+const resolvers = require('tempo/registerAPI.js')
 
 const Date = scalar.Date
 

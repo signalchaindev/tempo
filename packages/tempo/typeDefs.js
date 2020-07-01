@@ -1,6 +1,6 @@
-import fs from 'fs'
-import path from 'path'
-import { mergeTypeDefs } from 'graphql-toolkit'
+const fs = require('fs')
+const path = require('path')
+const { mergeTypeDefs } = require('graphql-toolkit')
 
 /**
  * @function loadGQLFiles
@@ -15,4 +15,4 @@ function loadGQLFiles() {
   return mergeTypeDefs(syncFiles)
 }
 
-export default loadGQLFiles()
+module.exports = loadGQLFiles()

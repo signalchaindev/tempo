@@ -1,7 +1,8 @@
-export default function getAllProducts() {
+module.exports = function getAllProducts() {
   return [
     {
-      names: 'shoes',
-    },
+      id: '12343',
+      name: 'First product'
+    }
   ]
 }

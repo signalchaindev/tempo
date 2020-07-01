@@ -1,0 +1,9 @@
+type Query {
+  getAllProducts:[Product!]!
+  getSingleProduct: 
+}
+
+type Product {
+  id: ID
+  name: String
+}

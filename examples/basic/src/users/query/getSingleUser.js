@@ -1,3 +1,3 @@
-export default function getSingleUser() {
+module.exports = function getSingleUser() {
   return { name: 'James', email: 'james@mail.com' }
 }

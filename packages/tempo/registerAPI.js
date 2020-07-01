@@ -1,3 +1,3 @@
 const resolvers = {}
 
-export default resolvers
+module.exports = resolvers
