@@ -4,6 +4,12 @@ A Node Graphql framework. That uses Golang to create a resolver map and concaten
 
 [WIP]
 
+## Database
+
+Requires MongoDB for package development
+
+Website: [https://www.mongodb.com/try/download/community](https://www.mongodb.com/try/download/community)
+
 ## Know issues (*fixed with the removal of esm package)
 
 Currently dumps:

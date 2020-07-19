@@ -1,6 +1,6 @@
-const { User } = require('../model.js')
+import { User } from '../model.js'
 
-module.exports = function getAllUsers() {
+export default function getAllUsers() {
   const users = User.find()
   return users
 }

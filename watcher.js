@@ -1,12 +1,12 @@
-const fs = require('fs')
-const path = require('path')
-const chokidar = require('chokidar')
-const chalk = require('chalk')
-const child_process = require('child_process')
+import fs from 'fs'
+import path from 'path'
+import chokidar from 'chokidar'
+import chalk from 'chalk'
+import child_process from 'child_process'
 
 const tempoDevEnv = path.join(process.cwd(), 'packages', 'tempo')
 const nodeModules = path.join(process.cwd(), 'node_modules')
-const tempo = path.join(process.cwd(), 'node_modules', 'tempo')
+const tempo = path.join(nodeModules, 'tempo')
 
 function run() {
   if (!fs.existsSync(tempo)) {
@@ -34,13 +34,23 @@ chokidar
   .watch(['./src/**/*.js', './src/**/*.graphql'], {
     ignored: /node_modules/,
   })
-  .on('change', event => {
-    console.log(chalk.blue(`[tempo] Change in ${event}`))
+  .on('addDir', path => log(`[tempo] Added directory ${path}`))
+  .on('change', path => {
+    console.log(chalk.blue(`[tempo] Change in ${path}`))
     run()
   })
+  .on('unlink', path => {
+    console.log(chalk.blue(`[tempo] Removed file ${path}`))
+    run()
+  })
+  .on('unlinkDir', path => log(`[tempo] Removed directory ${path}`))
+  .on('error', error => log(`[tempo] Watcher error: ${error}`))
+// .on('add', path => log(`[tempo] Added file ${path}`))
 
 /**
- * Copy packages in packages dir into node modules (for local dev)
+ * For package dev
+ * 
+ * Copy packages in packages dir into node modules
  * TODO: Find a better dev workflow
  */
 chokidar

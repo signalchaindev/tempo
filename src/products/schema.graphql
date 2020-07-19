@@ -1,9 +1,9 @@
 type Query {
-  getAllProducts:[Product!]!
-  getSingleProduct: 
+  getAllProducts: [Product!]!
 }
 
 type Product {
   id: ID
   name: String
+  price: Int
 }

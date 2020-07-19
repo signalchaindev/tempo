@@ -17,8 +17,8 @@
   },
   "scripts": {
     "dev": "run-p --race api watch",
-    "api": "nodemon -e js,graphql src/server.js",
-    "watch": "cross-env NODE_ENV=development nodemon watcher.js --watch src/**/*.graphql",
+    "api": "nodemon -r esm -e js,graphql src/server.js",
+    "watch": "nodemon -r esm watcher.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "homepage": "https://github.com/signalchainio/tempo#readme",

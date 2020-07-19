@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+import mongoose from 'mongoose'
 
-module.exports = async function resetDb() {
+export default async function resetDb() {
   if (process.env.NODE_ENV !== 'development') {
     throw new Error(
       "You're trying to delete the production database dummy! Don't do that.",

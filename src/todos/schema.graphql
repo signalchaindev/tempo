@@ -1,0 +1,13 @@
+type Query {
+  getAllTodos: [Todo!]!
+}
+
+type Mutation {
+  createTodo(input: String!): SuccessMessage
+}
+
+type Todo {
+  id: ID
+  todo: String
+  completed: Boolean
+}

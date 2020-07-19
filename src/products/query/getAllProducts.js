@@ -1,8 +1,9 @@
-module.exports = function getAllProducts() {
+export default function getAllProducts() {
   return [
     {
-      id: '12343',
-      name: 'First product'
+      id: "123456",
+      name: "Product 1",
+      price: 100
     }
   ]
 }

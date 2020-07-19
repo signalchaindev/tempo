@@ -1,6 +1,6 @@
-const { User } = require('../model.js')
+import { User } from '../model.js'
 
-module.exports = function getSingleUser(_, args) {
+export default function getSingleUser(_, args) {
   const user = User.findOne({ email: args.email })
   return user
 }
