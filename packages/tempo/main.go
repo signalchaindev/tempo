@@ -29,12 +29,15 @@ func main() {
 
 	/**
 	 * The input file path (defaults to `<root>/src`)
+	 *
 	 * TODO: make dynamic if user doesn't want to serve from an src dir
 	 */
-	inputPath, err := filepath.Abs(path.Join(root, "src"))
+	projectRootDir := "src"
+	inputPath, err := filepath.Abs(path.Join(root, projectRootDir))
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(inputPath)
 
 	/**
 	 * Chunk files into JS and graphql slices
@@ -94,7 +97,7 @@ func main() {
 	var schemaOutput string
 
 	/**
-	 * Read/Write files SDL files
+	 * Concatenate SDL files
 	 */
 	for _, file := range sdlFiles {
 		// contents of the file input
@@ -107,26 +110,24 @@ func main() {
 		schemaOutput = schemaOutput + sdl
 	}
 
-	content := []byte(string(schemaOutput))
-	err = ioutil.WriteFile(schemaOutputPath, content, 0644)
+	concatinatedSDL := []byte(string(schemaOutput))
+	err = ioutil.WriteFile(schemaOutputPath, concatinatedSDL, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	//* Below is code for registerAPI and is a [WIP]
-	//* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	/**
-	 * Query and mutation slices
+	 * Build registerAPI
 	 */
 	var resolvers = make(map[string]string)
 
 	/**
-	 * Read JS files and store them to slices
+	 * Separate resolvers from other js files in the tree
 	 */
 	for _, file := range jsFiles {
-		// TODO: instead of excluding things that aren't resolvers, just get the resolvers
 		isResolver := false
-		if !strings.Contains(file, "registerAPI") && !strings.Contains(file, "typeDefs") && !strings.Contains(file, "scalars") && !strings.Contains(file, "utils") && !strings.Contains(file, "lib") && !strings.Contains(file, "model") && !strings.Contains(file, "server") {
+
+		if strings.Contains(file, "mutation") || strings.Contains(file, "query") {
 			isResolver = true
 		}
 
@@ -134,14 +135,10 @@ func main() {
 			continue
 		}
 
-		if strings.Contains(file, "scalars") {
-			// Write in the scaler
-		}
-
 		/**
 		 * Split mutations and queries into there own slices
 		 */
-		path := fmt.Sprintf("%s", strings.Split(file, "src")[:2][1])
+		path := fmt.Sprintf("%s", strings.Split(file, projectRootDir)[:2][1])
 		_, file := filepath.Split(path)
 		functionName := strings.TrimSuffix(file, filepath.Ext(file))
 		resolvers[functionName] = filepath.ToSlash(path)
@@ -154,9 +151,8 @@ func main() {
 	var relativeRoot = "../../"
 
 	for functionName, path := range resolvers {
-		imports := fmt.Sprintf("import %s from \"%ssrc%s\";\n", functionName, relativeRoot, filepath.ToSlash(path))
-
-		importsOutput = importsOutput + imports
+		importStr := fmt.Sprintf("import %s from \"%s%s%s\";\n", functionName, relativeRoot, projectRootDir, filepath.ToSlash(path))
+		importsOutput = importsOutput + importStr
 	}
 
 	var mutation = ""
@@ -165,17 +161,17 @@ func main() {
 	for functionName, path := range resolvers {
 
 		if strings.Contains(path, "mutation") {
-			mutation = mutation + functionName + ", "
+			mutation = mutation + functionName + ",\n\t\t"
 		}
 
 		if strings.Contains(path, "query") {
-			query = query + functionName + ", "
+			query = query + functionName + ",\n\t\t"
 		}
 	}
 
 	mutationMap := fmt.Sprintf("%s\n", mutation)
 	queryMap := fmt.Sprintf("%s\n", query)
-	resolverMap := fmt.Sprintf("%s\nconst resolvers = {\n\tMutation: {\n\t\t%s\t},\n\tQuery: {\n\t\t%s\t},\n}\n\nexport default resolvers;", importsOutput, mutationMap, queryMap)
+	resolverMap := fmt.Sprintf("%s\nconst resolvers = {\n\tMutation: {\n\t\t%s\t},\n\tQuery: {\n\t\t%s\t},\n}\n\nexport default resolvers;\n", importsOutput, mutationMap, queryMap)
 
 	registerAPIOutputPath, err := filepath.Abs(path.Join(buildDir, "registerAPI.js"))
 	if err != nil {
