@@ -18,8 +18,10 @@
   },
   "scripts": {
     "dev": "run-p --race api watch",
+    "dev:package": "run-p --race api watch:package",
     "api": "nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
-    "watch": "nodemon -r esm __tempo__/watcher.js --ignore __tempo__"
+    "watch": "nodemon -r esm __tempo__/watcher.js --ignore __tempo__",
+    "watch:package": "cross-env PACKAGE_DEV=true nodemon -r esm __tempo__/watcher.js --ignore __tempo__"
   },
   "homepage": "https://github.com/signalchainio/tempo#readme",
   "dependencies": {
