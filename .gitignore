@@ -1,2 +1,4 @@
 node_modules
-__tempo__
+__tempo__/registerAPI.js
+__tempo__/schema.graphql
+__tempo__/tempo

@@ -48,3 +48,5 @@ A folder in the `src` directory denotes a collection of like functionality
 That folder should have a schema file (`schema.graphql`), `query` directory, and/or a `mutation` directory.
 
 Files in the `query` or `mutation` folders should have _one_ default export; a function of the same name as the file. These are your resolvers and automatically receive `parent, args, context, info` as params, as you would expect any other graphql resolver to have.
+
+Prefixing files with an underscore will cause them to be skipped by the compiler.
