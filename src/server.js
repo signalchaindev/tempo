@@ -5,8 +5,8 @@ import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import scalars from './scalars'
-import typeDefs from 'tempo/typeDefs.js'
-import resolvers from 'tempo/registerAPI.js'
+import typeDefs from '../__tempo__/typeDefs.js'
+import resolvers from '../__tempo__/registerAPI.js'
 
 
 const envPath = path.join(process.cwd(), '.env')
@@ -42,7 +42,7 @@ const graphQLServer = new ApolloServer({
   typeDefs,
   resolvers: {
     ...resolvers,
-    // ...scalars,
+    ...scalars,
   },
   context: ({ req, res }) => {
     return { req, res }

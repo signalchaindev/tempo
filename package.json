@@ -8,7 +8,8 @@
     "url": "git+https://github.com/signalchainio/tempo.git"
   },
   "keywords": [
-    "graphql"
+    "graphql",
+    "graphql server framework"
   ],
   "author": "",
   "license": "MIT",
@@ -17,9 +18,8 @@
   },
   "scripts": {
     "dev": "run-p --race api watch",
-    "api": "nodemon -r esm -e js,graphql src/server.js",
-    "watch": "nodemon -r esm watcher.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "api": "nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
+    "watch": "nodemon -r esm __tempo__/watcher.js --ignore __tempo__"
   },
   "homepage": "https://github.com/signalchainio/tempo#readme",
   "dependencies": {
