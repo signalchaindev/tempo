@@ -13,16 +13,16 @@ function run() {
       copyDevToDist()
     }
 
-    child_process.execSync('go build && tempo', { cwd: dist }, cb)
+    child_process.exec('go build && tempo', { cwd: dist }, cb)
     return
   }
 
-  child_process.execSync('tempo', { cwd: dist }, cb)
+  child_process.exec('tempo', { cwd: dist }, cb)
 }
 
 /**
-   * Build and run on src file change
-   */
+ * Build and run on src file change
+ */
 chokidar
   .watch(['./src/**/*.js', './src/**/*.graphql'], {
     ignored: [/node_modules/, /__tempo__/],
@@ -62,7 +62,7 @@ if (process.env.PACKAGE_DEV) {
       fs.mkdirSync(dist)
     }
 
-    child_process.execSync(`cp ${path.join(tempoDevEnv, 'main.go')} ${dist}`, cb)
+    child_process.exec(`cp ${path.join(tempoDevEnv, 'main.go')} ${dist}`, cb)
   }
 
   chokidar
@@ -88,6 +88,6 @@ function cb(error, stdout, stderr) {
     return
   }
 
-  // stdout
+  // Print stdout
   console.log(stdout)
 }
