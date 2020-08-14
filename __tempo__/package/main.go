@@ -165,23 +165,34 @@ func main() {
 		importsOutput = importsOutput + importStr
 	}
 
-	var mutation = ""
-	var query = ""
+	var mutationsSlice = []string{}
+	var querySlice = []string{}
 
 	for functionName, path := range resolvers {
 
 		if strings.Contains(path, "mutation") {
-			mutation = mutation + functionName + ",\n\t\t"
+			mutationsSlice = append(mutationsSlice, functionName)
 		}
 
 		if strings.Contains(path, "query") {
-			query = query + functionName + ",\n\t\t"
+			querySlice = append(querySlice, functionName)
 		}
+	}
+
+	var mutation = ""
+	var query = ""
+
+	for _, m := range mutationsSlice {
+		mutation = mutation + "\n\t\t" + m + ","
+	}
+
+	for _, q := range querySlice {
+		query = query + "\n\t\t" + q + ","
 	}
 
 	mutationMap := fmt.Sprintf("%s\n", mutation)
 	queryMap := fmt.Sprintf("%s\n", query)
-	resolverMap := fmt.Sprintf("%s\nconst resolvers = {\n\tMutation: {\n\t\t%s\t},\n\tQuery: {\n\t\t%s\t},\n}\n\nexport default resolvers;\n", importsOutput, mutationMap, queryMap)
+	resolverMap := fmt.Sprintf("%s\nconst resolvers = {\n\tMutation: {%s\t},\n\tQuery: {%s\t},\n}\n\nexport default resolvers;\n", importsOutput, mutationMap, queryMap)
 
 	registerAPIOutputPath, err := filepath.Abs(path.Join(buildDir, "registerAPI.js"))
 	if err != nil {

@@ -57,7 +57,6 @@ graphQLServer.applyMiddleware({
 
 // Start app
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 app.listen({ port }, err => {
   if (err) {
     console.error('🚨  UNABLE TO START: An error occurred on the sapper server')
