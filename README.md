@@ -49,4 +49,14 @@ That folder should have a schema file (`schema.graphql`), `query` directory, and
 
 Files in the `query` or `mutation` folders should have _one_ default export; a function of the same name as the file. These are your resolvers and automatically receive `parent, args, context, info` as params, as you would expect any other graphql resolver to have.
 
+## Ignoring files and skip dirs
+
+Tempo automatically skips files and directories with the names:
+
+1. .git
+
+1. node_modules
+
+1. utils
+
 Prefixing files with an underscore will cause them to be skipped by the compiler.

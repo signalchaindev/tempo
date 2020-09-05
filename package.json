@@ -1,8 +1,13 @@
 {
   "name": "tempo",
   "version": "1.0.0",
-  "description": "",
-  "main": "",
+  "description": "A Node GraphQL framework for compiling resolver map",
+  "license": "MIT",
+  "author": "",
+  "homepage": "https://github.com/signalchainio/tempo#readme",
+  "bugs": {
+    "url": "https://github.com/signalchainio/tempo/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/signalchainio/tempo.git"
@@ -11,11 +16,6 @@
     "graphql",
     "graphql server framework"
   ],
-  "author": "",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/signalchainio/tempo/issues"
-  },
   "scripts": {
     "dev": "run-p --race api watch",
     "dev:package": "run-p --race api watch:package",
@@ -23,7 +23,6 @@
     "watch": "nodemon -r esm __tempo__/watcher.js --ignore __tempo__",
     "watch:package": "cross-env PACKAGE_DEV=true nodemon -r esm __tempo__/watcher.js --ignore __tempo__"
   },
-  "homepage": "https://github.com/signalchainio/tempo#readme",
   "dependencies": {
     "apollo-server-express": "2.14.2",
     "cors": "2.8.5",

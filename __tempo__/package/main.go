@@ -7,7 +7,6 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"regexp"
 	"strings"
 )
 
@@ -47,7 +46,7 @@ func main() {
 	var jsFiles []string
 
 	error := filepath.Walk(inputPath, func(path string, info os.FileInfo, err error) error {
-		skipDirs := []string{".git", "node_modules"}
+		skipDirs := []string{".git", "node_modules", "utils"}
 
 		for _, skipDir := range skipDirs {
 			if info.IsDir() && info.Name() == skipDir {
@@ -60,12 +59,15 @@ func main() {
 		}
 
 		// If the file starts with an underscore, skip it
-		matched, err := regexp.MatchString(`_.`, path)
-		if err != nil {
-			log.Println(err)
-		}
-		if matched {
-			return nil
+		// Get file name for skip file match
+		_, file := filepath.Split(path)
+
+		for i, f := range file {
+			// 95 is the byte representation of the underscore
+			if i == 0 && f == 95 {
+				return nil
+			}
+			break
 		}
 
 		if filepath.Ext(path) == ".graphql" {
@@ -135,64 +137,40 @@ func main() {
 	 * Separate resolvers from other js files in the tree
 	 */
 	for _, file := range jsFiles {
-		isResolver := false
-
-		if strings.Contains(file, "mutation") || strings.Contains(file, "query") {
-			isResolver = true
-		}
-
-		if !isResolver {
+		// if the path is not in a mutation or query directory (it's not a resolver) skip to the next file
+		if !strings.Contains(file, "mutation") && !strings.Contains(file, "query") {
 			continue
 		}
 
-		/**
-		 * Split mutations and queries into there own slices
-		 */
-		path := fmt.Sprintf("%s", strings.Split(file, projectRootDir)[:2][1])
+		// Get file/function name and import path for each resolver
+		path := fmt.Sprintf("%s", strings.Split(file, projectRootDir)[1])
 		_, file := filepath.Split(path)
 		functionName := strings.TrimSuffix(file, filepath.Ext(file))
-		resolvers[functionName] = filepath.ToSlash(path)
+		resolvers[functionName] = filepath.ToSlash(projectRootDir + path)
 	}
 
 	/**
-	 * Build imports
+	 * Build imports from resolvers map
 	 */
-	var importsOutput = ""
+	var importsStr = ""
 	var relativeRoot = "../"
+	var mutationMap = ""
+	var queryMap = ""
 
 	for functionName, path := range resolvers {
-		importStr := fmt.Sprintf("import %s from \"%s%s%s\";\n", functionName, relativeRoot, projectRootDir, filepath.ToSlash(path))
-		importsOutput = importsOutput + importStr
-	}
-
-	var mutationsSlice = []string{}
-	var querySlice = []string{}
-
-	for functionName, path := range resolvers {
+		importStr := fmt.Sprintf("import %s from \"%s%s\";\n", functionName, relativeRoot, filepath.ToSlash(path))
+		importsStr = importsStr + importStr
 
 		if strings.Contains(path, "mutation") {
-			mutationsSlice = append(mutationsSlice, functionName)
+			mutationMap = mutationMap + "\n\t\t" + functionName + ","
 		}
 
 		if strings.Contains(path, "query") {
-			querySlice = append(querySlice, functionName)
+			queryMap = queryMap + "\n\t\t" + functionName + ","
 		}
 	}
 
-	var mutation = ""
-	var query = ""
-
-	for _, m := range mutationsSlice {
-		mutation = mutation + "\n\t\t" + m + ","
-	}
-
-	for _, q := range querySlice {
-		query = query + "\n\t\t" + q + ","
-	}
-
-	mutationMap := fmt.Sprintf("%s\n", mutation)
-	queryMap := fmt.Sprintf("%s\n", query)
-	resolverMap := fmt.Sprintf("%s\nconst resolvers = {\n\tMutation: {%s\t},\n\tQuery: {%s\t},\n}\n\nexport default resolvers;\n", importsOutput, mutationMap, queryMap)
+	resolverMap := fmt.Sprintf("%s\nconst resolvers = {\n\tMutation: {%s\n\t},\n\tQuery: {%s\n\t},\n}\n\nexport default resolvers;\n", importsStr, mutationMap, queryMap)
 
 	registerAPIOutputPath, err := filepath.Abs(path.Join(buildDir, "registerAPI.js"))
 	if err != nil {
