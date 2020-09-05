@@ -21,6 +21,7 @@ export default async function populateDb(_, args, ctx) {
       password: 'asdfasdf',
     },
   ]
+  console.log('users:', users)
 
   // Uncomment after "signUpUser" mutation is implemented
   // // Sign them up

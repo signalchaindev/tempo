@@ -42,8 +42,8 @@ module.exports = {
     'no-unused-vars': [
       'error',
       {
-        argsIgnorePattern: '^_|req|res|next|ctx',
-        varsIgnorePattern: '^_|req|res|next|ctx',
+        argsIgnorePattern: '^_|req|res|next|args|ctx',
+        varsIgnorePattern: '^_|req|res|next|args|ctx',
       },
     ],
     'no-use-before-define': 'error',

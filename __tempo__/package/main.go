@@ -8,9 +8,15 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func main() {
+	/**
+	 * Benchmark start
+	 */
+	start := time.Now()
+
 	/**
 	 * Get the working directory for the executable
 	 */
@@ -106,7 +112,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	var schemaOutput string
+	var allSchemas string
 
 	/**
 	 * Concatenate SDL files
@@ -118,20 +124,25 @@ func main() {
 			log.Fatal(err)
 		}
 
-		sdl := fmt.Sprintf("%s", contents)
-		schemaOutput = schemaOutput + sdl
+		sdl := fmt.Sprintf("%s\n", contents)
+		allSchemas = allSchemas + sdl
 	}
 
-	concatinatedSDL := []byte(string(schemaOutput))
+	concatinatedSDL := []byte(allSchemas)
 	err = ioutil.WriteFile(schemaOutputPath, concatinatedSDL, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	/**
-	 * Build registerAPI
+	 * Build resolver map (registerAPI)
 	 */
-	var resolvers = make(map[string]string)
+	type resolver struct {
+		FunctionName string
+		FilePath     string
+	}
+
+	var resolvers = []resolver{}
 
 	/**
 	 * Separate resolvers from other js files in the tree
@@ -146,7 +157,9 @@ func main() {
 		path := fmt.Sprintf("%s", strings.Split(file, projectRootDir)[1])
 		_, file := filepath.Split(path)
 		functionName := strings.TrimSuffix(file, filepath.Ext(file))
-		resolvers[functionName] = filepath.ToSlash(projectRootDir + path)
+
+		r := resolver{functionName, filepath.ToSlash(projectRootDir + path)}
+		resolvers = append(resolvers, r)
 	}
 
 	/**
@@ -157,7 +170,10 @@ func main() {
 	var mutationMap = ""
 	var queryMap = ""
 
-	for functionName, path := range resolvers {
+	for _, rd := range resolvers {
+		functionName := rd.FunctionName
+		path := rd.FilePath
+
 		importStr := fmt.Sprintf("import %s from \"%s%s\";\n", functionName, relativeRoot, filepath.ToSlash(path))
 		importsStr = importsStr + importStr
 
@@ -181,4 +197,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	/**
+	 * Benchmark END
+	 */
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Printf("[tempo] Time to build %v", elapsed)
 }

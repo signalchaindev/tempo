@@ -1,7 +1,7 @@
 {
   "name": "tempo",
   "version": "1.0.0",
-  "description": "A Node GraphQL framework for compiling resolver map",
+  "description": "A Node Graphql framework that uses Golang to create a resolver map and concatenate the SDL from GraphQL files into a useable schema for JavaScript APIs.",
   "license": "MIT",
   "author": "",
   "homepage": "https://github.com/signalchainio/tempo#readme",

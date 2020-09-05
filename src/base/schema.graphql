@@ -1,8 +1,10 @@
 type Mutation {
   resetDb: String
   populateDb: SuccessMessage
+  DUPLICATE: String
 }
 
 type Query {
   testConnection: String
+  DUPLICATE: String
 }
