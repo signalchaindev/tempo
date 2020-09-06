@@ -34,14 +34,26 @@ func main() {
 	}
 
 	/**
-	 * The input file path (defaults to `<root>/src`)
-	 *
-	 * TODO: make dynamic if user doesn't want to serve from an src dir
+	 * The input directory (defaults to `<root>/src`)
 	 */
+	// TODO: make dynamic if user doesn't want to serve from an src dir
 	projectRootDir := "src"
 	inputPath, err := filepath.Abs(path.Join(root, projectRootDir))
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	/**
+	 * Define output directory
+	 */
+	buildDir, err := filepath.Abs(path.Join(root, "__tempo__", "build"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// If path to build dir does not exist, mkdir
+	if _, err := os.Stat(buildDir); os.IsNotExist(err) {
+		os.MkdirAll(buildDir, os.ModePerm)
 	}
 
 	/**
@@ -89,19 +101,6 @@ func main() {
 
 	if error != nil {
 		panic(error)
-	}
-
-	/**
-	 * Define build directory
-	 */
-	buildDir, err := filepath.Abs(path.Join(root, "__tempo__"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// If path to build dir does not exist, mkdir
-	if _, err := os.Stat(buildDir); os.IsNotExist(err) {
-		os.MkdirAll(buildDir, os.ModePerm)
 	}
 
 	/**
@@ -166,7 +165,8 @@ func main() {
 	 * Build imports from resolvers map
 	 */
 	var importsStr = ""
-	var relativeRoot = "../"
+	// TODO: find relative root dynamically
+	var relativeRoot = "../../"
 	var mutationMap = ""
 	var queryMap = ""
 
@@ -186,7 +186,7 @@ func main() {
 		}
 	}
 
-	resolverMap := fmt.Sprintf("%s\nconst resolvers = {\n\tMutation: {%s\n\t},\n\tQuery: {%s\n\t},\n}\n\nexport default resolvers;\n", importsStr, mutationMap, queryMap)
+	resolverMap := fmt.Sprintf("%s\nexport const resolvers = {\n\tMutation: {%s\n\t},\n\tQuery: {%s\n\t},\n}\n", importsStr, mutationMap, queryMap)
 
 	registerAPIOutputPath, err := filepath.Abs(path.Join(buildDir, "registerAPI.js"))
 	if err != nil {

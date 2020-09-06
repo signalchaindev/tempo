@@ -5,8 +5,7 @@ import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import scalars from './scalars'
-import typeDefs from '../__tempo__/typeDefs.js'
-import resolvers from '../__tempo__/registerAPI.js'
+import { typeDefs, resolvers } from '../__tempo__'
 
 
 const envPath = path.join(process.cwd(), '.env')

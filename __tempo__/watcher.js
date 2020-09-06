@@ -4,20 +4,35 @@ import chokidar from 'chokidar'
 import chalk from 'chalk'
 import child_process from 'child_process'
 
-const tempoDevEnv = path.join(process.cwd(), '__tempo__', 'package')
-const dist = path.join(process.cwd(), '__tempo__', 'tempo')
+const devEnv = path.join(process.cwd(), '__tempo__', 'package')
+const buildDir = path.join(process.cwd(), '__tempo__', 'build')
+const exeName = 'tempo'
 
 function run() {
-  if (process.env.PACKAGE_DEV) {
-    if (!fs.existsSync(dist)) {
-      copyDevToDist()
-    }
+  child_process.exec(exeName, { cwd: buildDir }, cb)
+}
 
-    child_process.exec('go build && tempo', { cwd: dist }, cb)
-    return
+/**
+ * For package dev
+ */
+if (process.env.PACKAGE_DEV) {
+  chokidar
+    .watch('./__tempo__/package/**/*.go')
+    .on('ready', () => {
+      buildBinary()
+    })
+    .on('change', event => {
+      console.log(chalk.blue(`[tempo] Change in ${event}`))
+      buildBinary()
+      run()
+    })
+}
+
+function buildBinary() {
+  if (!fs.existsSync(buildDir)) {
+    fs.mkdirSync(buildDir)
   }
-
-  child_process.exec('tempo', { cwd: dist }, cb)
+  child_process.execSync(`go build -o ${buildDir}/${exeName}.exe`, { cwd: devEnv }, cb)
 }
 
 /**
@@ -25,10 +40,12 @@ function run() {
  */
 chokidar
   .watch(['./src/**/*.js', './src/**/*.graphql'], {
-    ignored: [/node_modules/, /__tempo__/],
+    ignored: [/node_modules/, /__tempo__/, /__sapper__/],
   })
   .on('ready', () => {
-    run()
+    setTimeout(() => {
+      run()
+    }, 300)
   })
   .on('addDir', path => {
     console.log(chalk.blue(`[tempo] Added directory ${path}`))
@@ -51,28 +68,6 @@ chokidar
     run()
   })
 
-/**
- * For package dev
- */
-let copyDevToDist
-
-if (process.env.PACKAGE_DEV) {
-  copyDevToDist = () => {
-    if (!fs.existsSync(dist)) {
-      fs.mkdirSync(dist)
-    }
-
-    child_process.exec(`cp ${path.join(tempoDevEnv, 'main.go')} ${dist}`, cb)
-  }
-
-  chokidar
-    .watch('./__tempo__/package/**/*')
-    .on('change', event => {
-      console.log(chalk.blue(`[tempo] Change in ${event}`))
-      copyDevToDist()
-      run()
-    })
-}
 
 /**
  * Callback for errors and stdout
