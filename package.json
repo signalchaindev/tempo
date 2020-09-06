@@ -1,6 +1,6 @@
 {
   "name": "tempo",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A Node Graphql framework that uses Golang to create a resolver map and concatenate the SDL from GraphQL files into a useable schema for JavaScript APIs.",
   "license": "MIT",
   "author": "",
@@ -18,9 +18,9 @@
   ],
   "scripts": {
     "dev": "run-p --race api watch",
-    "dev:package": "run-p --race api watch:package",
     "api": "nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
     "watch": "nodemon -r esm __tempo__/watcher.js --ignore __tempo__",
+    "dev:package": "pushd .\\__tempo__\\package && go run main.go && popd && run-p --race api watch:package",
     "watch:package": "cross-env PACKAGE_DEV=true nodemon -r esm __tempo__/watcher.js --ignore __tempo__"
   },
   "dependencies": {
