@@ -77,14 +77,14 @@ func main() {
 	/**
 	 * Handle JS and graphql files
 	 */
-	skipDirs := []string{".git", "node_modules", "utils"}
-	var allSchemas string
 
 	type resolver struct {
 		FunctionName string
 		FilePath     string
 	}
 
+	skipDirs := []string{".git", "node_modules", "utils"}
+	var allSchemas string
 	var resolvers = []resolver{}
 
 	error := filepath.Walk(inputPath, func(path string, info os.FileInfo, err error) error {
