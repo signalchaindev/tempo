@@ -47,10 +47,6 @@ chokidar
       run()
     }, 300)
   })
-  .on('addDir', path => {
-    console.log(chalk.blue(`[tempo] Added directory ${path}`))
-    run()
-  })
   .on('change', path => {
     console.log(chalk.blue(`[tempo] Change in ${path}`))
     run()

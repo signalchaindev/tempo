@@ -51,49 +51,84 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// If path to build dir does not exist, mkdir
+	/**
+	 * Define schema output file
+	 */
+	schemaOutputPath, err := filepath.Abs(path.Join(buildDir, "schema.graphql"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	/**
+	 * Define resolver map output file
+	 */
+	registerAPIOutputPath, err := filepath.Abs(path.Join(buildDir, "registerAPI.js"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	/**
+	 * If path to build dir does not exist, mkdir
+	 */
 	if _, err := os.Stat(buildDir); os.IsNotExist(err) {
 		os.MkdirAll(buildDir, os.ModePerm)
 	}
 
 	/**
-	 * Chunk files into JS and graphql slices
-	 * https://flaviocopes.com/go-list-files
+	 * Handle JS and graphql files
 	 */
-	var sdlFiles []string
-	var jsFiles []string
+	skipDirs := []string{".git", "node_modules", "utils"}
+	var allSchemas string
+
+	type resolver struct {
+		FunctionName string
+		FilePath     string
+	}
+
+	var resolvers = []resolver{}
 
 	error := filepath.Walk(inputPath, func(path string, info os.FileInfo, err error) error {
-		skipDirs := []string{".git", "node_modules", "utils"}
-
+		// Skip specified skipDirs
 		for _, skipDir := range skipDirs {
 			if info.IsDir() && info.Name() == skipDir {
 				return filepath.SkipDir
 			}
 		}
 
+		// Skip all directories
 		if info.IsDir() {
 			return nil
 		}
 
 		// If the file starts with an underscore, skip it
-		// Get file name for skip file match
-		_, file := filepath.Split(path)
+		if info.Name()[0] == 95 {
+			return nil
+		}
 
-		for i, f := range file {
-			// 95 is the byte representation of the underscore
-			if i == 0 && f == 95 {
+		// Concatenate graphql files into allSchemas string
+		if filepath.Ext(path) == ".graphql" {
+			contents, err := ioutil.ReadFile(path)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			sdl := fmt.Sprintf("%s\n", contents)
+			allSchemas = allSchemas + sdl
+		}
+
+		// Make slice with .js file paths
+		if filepath.Ext(path) == ".js" {
+			// if the path is not in a mutation or query directory (it's not a resolver) skip to the next file
+			if !strings.Contains(path, "mutation") && !strings.Contains(path, "query") {
 				return nil
 			}
-			break
-		}
 
-		if filepath.Ext(path) == ".graphql" {
-			sdlFiles = append(sdlFiles, path)
-		}
+			// Get file/function name and import path for each resolver
+			relPath := fmt.Sprintf("%s", strings.Split(path, projectRootDir)[1])
+			functionName := strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))
 
-		if filepath.Ext(path) == ".js" {
-			jsFiles = append(jsFiles, path)
+			r := resolver{functionName, filepath.ToSlash(projectRootDir + relPath)}
+			resolvers = append(resolvers, r)
 		}
 
 		return nil
@@ -106,27 +141,6 @@ func main() {
 	/**
 	 * Output schema to build dir
 	 */
-	schemaOutputPath, err := filepath.Abs(path.Join(buildDir, "schema.graphql"))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var allSchemas string
-
-	/**
-	 * Concatenate SDL files
-	 */
-	for _, file := range sdlFiles {
-		// contents of the file input
-		contents, err := ioutil.ReadFile(file)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		sdl := fmt.Sprintf("%s\n", contents)
-		allSchemas = allSchemas + sdl
-	}
-
 	concatinatedSDL := []byte(allSchemas)
 	err = ioutil.WriteFile(schemaOutputPath, concatinatedSDL, 0644)
 	if err != nil {
@@ -136,37 +150,9 @@ func main() {
 	/**
 	 * Build resolver map (registerAPI)
 	 */
-	type resolver struct {
-		FunctionName string
-		FilePath     string
-	}
-
-	var resolvers = []resolver{}
-
-	/**
-	 * Separate resolvers from other js files in the tree
-	 */
-	for _, file := range jsFiles {
-		// if the path is not in a mutation or query directory (it's not a resolver) skip to the next file
-		if !strings.Contains(file, "mutation") && !strings.Contains(file, "query") {
-			continue
-		}
-
-		// Get file/function name and import path for each resolver
-		path := fmt.Sprintf("%s", strings.Split(file, projectRootDir)[1])
-		_, file := filepath.Split(path)
-		functionName := strings.TrimSuffix(file, filepath.Ext(file))
-
-		r := resolver{functionName, filepath.ToSlash(projectRootDir + path)}
-		resolvers = append(resolvers, r)
-	}
-
-	/**
-	 * Build imports from resolvers map
-	 */
-	var importsStr = ""
 	// TODO: find relative root dynamically
 	var relativeRoot = "../../"
+	var importsStr = ""
 	var mutationMap = ""
 	var queryMap = ""
 
@@ -187,11 +173,6 @@ func main() {
 	}
 
 	resolverMap := fmt.Sprintf("%s\nexport const resolvers = {\n\tMutation: {%s\n\t},\n\tQuery: {%s\n\t},\n}\n", importsStr, mutationMap, queryMap)
-
-	registerAPIOutputPath, err := filepath.Abs(path.Join(buildDir, "registerAPI.js"))
-	if err != nil {
-		log.Fatal(err)
-	}
 
 	err = ioutil.WriteFile(registerAPIOutputPath, []byte(resolverMap), 0644)
 	if err != nil {
