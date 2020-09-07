@@ -14,20 +14,21 @@ A Node Graphql framework that uses Golang to create a resolver map and concatena
 
 1. Create a `src/server.js` file (Any Apollo/Node server set up should do fine)
 
-1. Import typeDefs and resolvers from the tempo package
+1. Import _typeDefs_, _resolvers_, and _init_ from the tempo package
 
 ```js
-import typeDefs from '../__tempo__/typeDefs.js'
-import resolvers from '../__tempo__/registerAPI.js'
+import { typeDefs, resolvers, init } from '../__tempo__'
+
+init()
 ```
 
 ### NPM Scripts
 
 ```js
 "scripts": {
-  "dev": "run-p --race api watch",
-  "api": "nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
-  "watch": "nodemon -r esm __tempo__/watcher.js --ignore __tempo__"
+  "dev": "npm run build && nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
+  "dev:package": "npm run build && cross-env PACKAGE_DEV=true nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
+  "build": "node -r esm __tempo__/builder.js"
 },
 ```
 
@@ -37,7 +38,7 @@ A folder in the `src` directory denotes a collection of like functionality
 
 That folder should have a schema file (`schema.graphql`), `query` directory, and/or a `mutation` directory.
 
-Files in the `query` or `mutation` folders should have _one_ default export; a function of the same name as the file. These are your resolvers and automatically receive `parent, args, context, info` as params, as you would expect any other graphql resolver to have.
+Files in the `query` or `mutation` directories should have _one_ function that is a default export. This function needs to be named the same as the file. These functions are your resolvers and automatically receive `parent, args, context, info` as params, as you would expect any other graphql resolver to have.
 
 Files being used for queries and mutations must have unique names. Because imports in the resolver map are set using the file's name, filenames cannot be repeated.
 
@@ -51,22 +52,20 @@ Tempo automatically skips files and directories with the names:
 
 1. utils
 
-**Prefixing files with an underscore will cause them to be skipped by the compiler.**
+1. Starting with the "underscore". **Prefixing files with an underscore will cause them to be skipped by the compiler.**
 
 ## Development
 
 ### NPM Dev Scripts
 
-```js
-"scripts": {
-  "dev:package": "run-p --race api watch:package",
-  "api": "nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
-  "watch:package": "cross-env PACKAGE_DEV=true nodemon -r esm __tempo__/watcher.js --ignore __tempo__"
-},
-```
+Use the _dev:package_ script when working on the _main.go_ file to get auto reloading/re-running during development.
 
 ### Database
 
 Requires MongoDB for package development
 
 Website: [https://www.mongodb.com/try/download/community](https://www.mongodb.com/try/download/community)
+
+## Known bugs
+
+Changing filenames or deleting files can cause the node process to get stuck. Exiting the process and re-running the start script will fix this.

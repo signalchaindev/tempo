@@ -19,13 +19,7 @@ func main() {
 	start := time.Now()
 
 	/**
-	 * Root of project
-	 * Because we are passing the root of the node process through os.Args, you cannot run this package without specifying a project root path
-	 */
-	// root := os.Args[1]
-
-	/**
-	 * Get the working directory for the executable
+	* Get the working directory for the executable
 	 */
 	wd, err := os.Getwd()
 	if err != nil {
@@ -33,7 +27,7 @@ func main() {
 	}
 
 	/**
-	 * Find root from the executable's working directory
+	* Find root from the executable's working directory
 	 */
 	root, err := filepath.Abs(path.Join(wd, "../../../"))
 	if err != nil {
@@ -41,12 +35,11 @@ func main() {
 	}
 
 	/**
-	 * Get the working directory for the executable
+	 * Another option for getting the root of the working process
+	 * Root of project
+	 * Because we are passing the root of the node process through os.Args, you cannot run this package without specifying a project root path
 	 */
-	// wd, err := os.Getwd()
-	// if err != nil {
-	// 	panic(err)
-	// }
+	// root := os.Args[1]
 
 	/**
 	 * The input directory (defaults to `<root>/src`)

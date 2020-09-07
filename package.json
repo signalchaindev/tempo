@@ -17,8 +17,9 @@
     "graphql server framework"
   ],
   "scripts": {
-    "dev": "nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
-    "dev:package": "cross-env PACKAGE_DEV=true nodemon -r esm -e js,graphql src/server.js --ignore __tempo__"
+    "dev": "npm run build && nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
+    "dev:package": "npm run build && cross-env PACKAGE_DEV=true nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
+    "build": "node -r esm __tempo__/builder.js"
   },
   "dependencies": {
     "apollo-server-express": "2.14.2",
