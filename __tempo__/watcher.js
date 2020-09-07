@@ -4,66 +4,66 @@ import chokidar from 'chokidar'
 import chalk from 'chalk'
 import child_process from 'child_process'
 
+/**
+ * Build and run on src file change
+ */
+export function init() {
+  chokidar
+    .watch(['./src/**/*.js', './src/**/*.graphql'], {
+      ignored: [/node_modules/, /__tempo__/],
+    })
+    .on('ready', () => {
+      buildBinary()
+      run()
+    })
+    .on('change', path => {
+      console.log(chalk.blue(`[tempo] Changed file ${path}`))
+      run()
+    })
+    .on('unlink', path => {
+      console.log(chalk.blue(`[tempo] Removed file ${path}`))
+      run()
+    })
+    .on('unlinkDir', path => {
+      console.log(`[tempo] Removed directory ${path}`)
+      run()
+    })
+    .on('error', error => {
+      console.log(`[tempo] Watcher error: ${error}`)
+    })
+
+
+  /**
+   * For package dev
+   */
+  if (process.env.PACKAGE_DEV) {
+    chokidar
+      .watch('./__tempo__/package/**/*.go')
+      .on('ready', () => {
+        buildBinary()
+      })
+      .on('change', event => {
+        console.log(chalk.blue(`[tempo] Change in ${event}`))
+        buildBinary()
+        run()
+      })
+  }
+}
+
 const devEnv = path.join(process.cwd(), '__tempo__', 'package')
 const buildDir = path.join(process.cwd(), '__tempo__', 'build')
 const exeName = 'tempo'
 
 function run() {
-  child_process.exec(exeName, { cwd: buildDir }, cb)
+  child_process.exec(`${exeName} ${process.cwd()}`, { cwd: buildDir }, cb)
 }
 
-/**
- * For package dev
- */
-if (process.env.PACKAGE_DEV) {
-  chokidar
-    .watch('./__tempo__/package/**/*.go')
-    .on('ready', () => {
-      buildBinary()
-    })
-    .on('change', event => {
-      console.log(chalk.blue(`[tempo] Change in ${event}`))
-      buildBinary()
-      run()
-    })
-}
-
-function buildBinary() {
+export function buildBinary() {
   if (!fs.existsSync(buildDir)) {
     fs.mkdirSync(buildDir)
   }
   child_process.execSync(`go build -o ${buildDir}/${exeName}.exe`, { cwd: devEnv }, cb)
 }
-
-/**
- * Build and run on src file change
- */
-chokidar
-  .watch(['./src/**/*.js', './src/**/*.graphql'], {
-    ignored: [/node_modules/, /__tempo__/, /__sapper__/],
-  })
-  .on('ready', () => {
-    setTimeout(() => {
-      run()
-    }, 300)
-  })
-  .on('change', path => {
-    console.log(chalk.blue(`[tempo] Change in ${path}`))
-    run()
-  })
-  .on('unlink', path => {
-    console.log(chalk.blue(`[tempo] Removed file ${path}`))
-    run()
-  })
-  .on('unlinkDir', path => {
-    console.log(`[tempo] Removed directory ${path}`)
-    run()
-  })
-  .on('error', error => {
-    console.log(`[tempo] Watcher error: ${error}`)
-    run()
-  })
-
 
 /**
  * Callback for errors and stdout

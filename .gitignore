@@ -1,4 +1,2 @@
 node_modules
-__tempo__/registerAPI.js
-__tempo__/schema.graphql
-__tempo__/tempo/main.go
+__tempo__/build

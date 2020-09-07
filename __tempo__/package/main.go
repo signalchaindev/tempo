@@ -12,10 +12,17 @@ import (
 )
 
 func main() {
+
 	/**
 	 * Benchmark start
 	 */
 	start := time.Now()
+
+	/**
+	 * Root of project
+	 * Because we are passing the root of the node process through os.Args, you cannot run this package without specifying a project root path
+	 */
+	// root := os.Args[1]
 
 	/**
 	 * Get the working directory for the executable
@@ -32,6 +39,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	/**
+	 * Get the working directory for the executable
+	 */
+	// wd, err := os.Getwd()
+	// if err != nil {
+	// 	panic(err)
+	// }
 
 	/**
 	 * The input directory (defaults to `<root>/src`)

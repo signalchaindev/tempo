@@ -17,11 +17,8 @@
     "graphql server framework"
   ],
   "scripts": {
-    "dev": "run-p --race api watch",
-    "api": "nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
-    "watch": "nodemon -r esm __tempo__/watcher.js --ignore __tempo__",
-    "dev:package": "pushd .\\__tempo__\\package && go run main.go && popd && run-p --race api watch:package",
-    "watch:package": "cross-env PACKAGE_DEV=true nodemon -r esm __tempo__/watcher.js --ignore __tempo__"
+    "dev": "nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
+    "dev:package": "cross-env PACKAGE_DEV=true nodemon -r esm -e js,graphql src/server.js --ignore __tempo__"
   },
   "dependencies": {
     "apollo-server-express": "2.14.2",
