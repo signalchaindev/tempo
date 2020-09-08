@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import chalk from 'chalk'
+// import chalk from 'chalk'
 import child_process from 'child_process'
 
 
@@ -26,12 +26,14 @@ run()
  */
 function cb(error, stdout, stderr) {
   if (error) {
-    console.error(chalk.red(`Error: ${error.message}`))
+    // console.error(chalk.red(`Error: ${error.message}`))
+    console.error(`Error: ${error.message}`)
     return
   }
 
   if (stderr) {
-    console.error(chalk.red(`Error: ${stderr}`))
+    // console.error(chalk.red(`Error: ${stderr}`))
+    console.error(`Error: ${stderr}`)
     return
   }
 
