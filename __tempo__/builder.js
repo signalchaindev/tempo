@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import os from 'os'
 import chalk from 'chalk'
 import child_process from 'child_process'
 
@@ -12,12 +13,21 @@ export function buildBinary() {
   if (!fs.existsSync(buildDir)) {
     fs.mkdirSync(buildDir)
   }
-  child_process.execSync(`go build -o ${buildDir}/${exeName}.exe`, { cwd: devEnv }, cb)
+
+  // TODO: Test that binaries are being built for supported operating systems
+  // https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04#step-4-%E2%80%94-building-executables-for-different-architectures
+
+  // Windows - win32
+  child_process.execSync(`env GOOS=windows GOARCH=386 go build -o ${buildDir}/win32/${exeName}.exe`, { cwd: devEnv }, cb)
+  // Windows - win64
+  child_process.execSync(`env GOOS=windows GOARCH=amd64 go build -o ${buildDir}/win64/${exeName}.exe`, { cwd: devEnv }, cb)
+  // Mac - darwin
+  child_process.execSync(`env GOOS=darwin GOARCH=amd64 go build -o ${buildDir}/darwin/${exeName}`, { cwd: devEnv }, cb)
 }
 buildBinary()
 
 export function run() {
-  child_process.exec(`${exeName} ${process.cwd()}`, { cwd: buildDir }, cb)
+  child_process.exec(`${exeName} ${process.cwd()}`, { cwd: `${buildDir}/${os.platform()}` }, cb)
 }
 run()
 

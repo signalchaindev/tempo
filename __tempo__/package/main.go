@@ -29,7 +29,7 @@ func main() {
 	/**
 	* Find root from the executable's working directory
 	 */
-	root, err := filepath.Abs(path.Join(wd, "../../../"))
+	root, err := filepath.Abs(path.Join(wd, "../../../../"))
 	if err != nil {
 		log.Fatal(err)
 	}
