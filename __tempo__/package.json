@@ -1,0 +1,35 @@
+{
+  "name": "tempo",
+  "version": "0.1.0",
+  "main": "index.js",
+  "description": "A Node Graphql framework that uses Golang to create a resolver map and concatenate the SDL from GraphQL files into a useable schema for JavaScript APIs.",
+  "license": "MIT",
+  "author": "",
+  "homepage": "https://github.com/signalchainio/tempo#readme",
+  "bugs": {
+    "url": "https://github.com/signalchainio/tempo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/signalchainio/tempo.git"
+  },
+  "keywords": [
+    "graphql",
+    "graphql server framework"
+  ],
+  "scripts": {
+    "// TODO": "build CLI",
+    "build": "node -r esm buildResolvers.js",
+    "build:bin": "node -r esm buildBinary.js",
+    "clean": "rm -rf build"
+  },
+  "dependencies": {
+    "@graphql-tools/merge": "6.2.2",
+    "apollo-server-express": "2.17.0"
+  },
+  "devDependencies": {
+    "chalk": "4.1.0",
+    "chokidar": "3.4.2",
+    "tree-kill": "1.2.2"
+  }
+}

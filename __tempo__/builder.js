@@ -3,23 +3,31 @@ import path from 'path'
 import chalk from 'chalk'
 import child_process from 'child_process'
 
-
-const devEnv = path.join(process.cwd(), '__tempo__', 'package')
+const binDir = path.join(process.cwd(), '__tempo__', '.bin')
 const buildDir = path.join(process.cwd(), '__tempo__', 'build')
+const devEnv = path.join(process.cwd(), '__tempo__', 'package')
 const exeName = 'tempo'
 
+
+/**
+ * Build the Go binary
+ */
 export function buildBinary() {
+  if (!fs.existsSync(binDir)) {
+    fs.mkdirSync(binDir)
+  }
+  child_process.exec(`go build -o ${binDir}/${exeName}.exe`, { cwd: devEnv }, cb)
+}
+
+/**
+ * Run the Go binary to build the resolver map and type def AST
+ */
+export function run() {
   if (!fs.existsSync(buildDir)) {
     fs.mkdirSync(buildDir)
   }
-  child_process.execSync(`go build -o ${buildDir}/${exeName}.exe`, { cwd: devEnv }, cb)
+  child_process.exec(`${exeName} ${process.cwd()}`, { cwd: binDir }, cb)
 }
-buildBinary()
-
-export function run() {
-  child_process.exec(`${exeName} ${process.cwd()}`, { cwd: buildDir }, cb)
-}
-run()
 
 /**
  * Callback for errors and stdout
@@ -36,5 +44,9 @@ function cb(error, stdout, stderr) {
   }
 
   // Print stdout
+  if (stdout.match(/time to build/gi)) {
+    console.log(chalk.blue(stdout))
+    return
+  }
   console.log(stdout)
 }
