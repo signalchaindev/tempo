@@ -18,10 +18,7 @@
     "graphql server framework"
   ],
   "scripts": {
-    "// TODO": "build CLI",
-    "build": "node -r esm buildResolvers.js",
-    "build:bin": "node -r esm buildBinary.js",
-    "clean": "rm -rf build"
+    "// TODO": "build CLI"
   },
   "dependencies": {
     "@graphql-tools/merge": "6.2.2",
