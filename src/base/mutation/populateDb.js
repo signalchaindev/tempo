@@ -16,7 +16,6 @@ export default async function populateDb(_, args, ctx) {
       permissions: ['ADMIN', 'USER', 'SUPER_ADMIN'],
     },
     {
-      name: 'Jamey',
       email: 'jamey@mail.com',
       password: 'asdfasdf',
     },

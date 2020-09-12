@@ -1,13 +1,10 @@
 import path from 'path'
 import express from 'express'
 import mongoose from 'mongoose'
-import { ApolloServer } from 'apollo-server-express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import scalars from './scalars'
-import { typeDefs, resolvers, init } from '../__tempo__'
-
-init()
+import { tempo, watch } from '../__tempo__'
 
 const envPath = path.join(process.cwd(), '.env')
 dotenv.config({ path: envPath })
@@ -38,21 +35,18 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
-const graphQLServer = new ApolloServer({
-  typeDefs,
-  resolvers: {
-    ...resolvers,
-    ...scalars,
+watch() // for tempo package dev
+tempo(app, {
+  server: {
+    resolvers: {
+      ...scalars, // Optional - for use with custom scalars
+    },
+    // context: () => {} // Optional
   },
-  context: ({ req, res }) => {
-    return { req, res }
-  },
-})
-
-graphQLServer.applyMiddleware({
-  app,
-  path: `/${gqlServerPath}`,
-  cors: corsOptions,
+  middleware: {
+    path: `/${gqlServerPath}`, // default = /__graphql
+    cors: corsOptions, // Optional = CORS
+  }
 })
 
 // Start app

@@ -1,6 +1,6 @@
-const { User } = require('../model.js')
+import { User } from '../model.js'
 
-module.exports = function createUser(_, args) {
+export default function createUser(_, args) {
   const user = {
     name: args.name || 'James',
     email: args.email || 'james@mail.com',

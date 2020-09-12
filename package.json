@@ -20,7 +20,8 @@
     "dev:rollup": "rollup -c -w",
     "dev": "npm run tempo:build && nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
     "dev:package": "npm run tempo:build && cross-env PACKAGE_DEV=true nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
-    "tempo:build": "node -r esm __tempo__/builder.js"
+    "tempo:build": "node -r esm __tempo__/builder.js",
+    "clean": "rm -rf __tempo__/build"
   },
   "dependencies": {
     "apollo-server-express": "2.14.2",

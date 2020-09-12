@@ -1,9 +1,9 @@
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import polyfills from 'rollup-plugin-node-polyfills';
+import polyfills from 'rollup-plugin-node-polyfills'
 import json from '@rollup/plugin-json'
-import { terser } from 'rollup-plugin-terser';
-import { buildBinary, run } from "./__tempo__/builder.js"
+import { terser } from 'rollup-plugin-terser'
+import { buildBinary, run } from './__tempo__/builder.js'
 import pkg from './package.json'
 
 const production = !process.env.ROLLUP_WATCH
@@ -18,7 +18,7 @@ function serve() {
   return {
     writeBundle() {
       if (server) return
-      server = require('child_process').spawn('nodemon', ['-e js,graphql','dist/bundle.js', '--ignore __tempo__'], {
+      server = require('child_process').spawn('nodemon', ['-e js,graphql', 'dist/bundle.js', '--ignore __tempo__'], {
         stdio: ['ignore', 'inherit', 'inherit'],
         shell: true
       })
