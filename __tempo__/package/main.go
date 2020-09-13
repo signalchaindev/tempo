@@ -21,9 +21,9 @@ func main() {
 	 * Benchmark start
 	 */
 	start := time.Now()
-
-	// For calling main.go directly in dev
 	var root string
+
+	// ** DEV ONLY ** For calling main.go directly in dev
 	if os.Args == nil {
 		/**
 		 * Get the working directory for the executable
