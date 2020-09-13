@@ -1,0 +1,7 @@
+type Mutation {
+  testMut: String
+}
+
+type Query {
+  connectApi: String
+}

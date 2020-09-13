@@ -11,27 +11,35 @@ import (
 	"time"
 )
 
-func main() {
+type resolver struct {
+	FunctionName string
+	FilePath     string
+}
 
+func main() {
 	/**
 	 * Benchmark start
 	 */
 	start := time.Now()
+	var root string
 
-	/**
-	* Get the working directory for the executable
-	 */
-	wd, err := os.Getwd()
-	if err != nil {
-		panic(err)
-	}
+	// ** DEV ONLY ** For calling main.go directly in dev
+	if os.Args == nil {
+		/**
+		 * Get the working directory for the executable
+		 */
+		wd, err := os.Getwd()
+		if err != nil {
+			panic(err)
+		}
 
-	/**
-	* Find root from the executable's working directory
-	 */
-	root, err := filepath.Abs(path.Join(wd, "../../../"))
-	if err != nil {
-		log.Fatal(err)
+		/**
+		 * Find root from the executable's working directory
+		 */
+		root, err = filepath.Abs(path.Join(wd, "../../../"))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	/**
@@ -39,17 +47,8 @@ func main() {
 	 * Root of project
 	 * Because we are passing the root of the node process through os.Args, you cannot run this package without specifying a project root path
 	 */
-	// root := os.Args[1]
-
-	/**
-	 * The input directory (defaults to `<root>/src`)
-	 */
-	// TODO: make dynamic if user doesn't want to serve from an src dir
-	projectRootDir := "src"
-	inputPath, err := filepath.Abs(path.Join(root, projectRootDir))
-	if err != nil {
-		log.Fatal(err)
-	}
+	root = os.Args[1]
+	walkDirs := os.Args[2:]
 
 	/**
 	 * Define output directory
@@ -85,15 +84,80 @@ func main() {
 	/**
 	 * Handle JS and graphql files
 	 */
-
-	type resolver struct {
-		FunctionName string
-		FilePath     string
+	var allSchemas string
+	var resolvers = []resolver{}
+	for _, dir := range walkDirs {
+		s, r := walk(root, dir)
+		allSchemas = allSchemas + s
+		resolvers = append(resolvers, r...)
 	}
 
+	/**
+	 * Output schema to build dir
+	 */
+	concatinatedSDL := []byte(allSchemas)
+	err = ioutil.WriteFile(schemaOutputPath, concatinatedSDL, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	/**
+	 * Build resolver map (registerAPI)
+	 */
+	rel, err := filepath.Rel(root, buildDir)
+	if err != nil {
+		log.Fatal("Could not find the relative path of the build directory")
+	}
+	depth := len(strings.Split(rel, string(filepath.Separator)))
+
+	var relativeRoot = strings.Repeat("../", depth)
+	var importsStr = ""
+	var mutationMap = ""
+	var queryMap = ""
+
+	for _, rd := range resolvers {
+		functionName := rd.FunctionName
+		path := rd.FilePath
+
+		importStr := fmt.Sprintf("import %s from \"%s%s\";\n", functionName, relativeRoot, filepath.ToSlash(path))
+		importsStr = importsStr + importStr
+
+		if strings.Contains(path, "mutation") {
+			mutationMap = mutationMap + "\n\t\t" + functionName + ","
+		}
+
+		if strings.Contains(path, "query") {
+			queryMap = queryMap + "\n\t\t" + functionName + ","
+		}
+	}
+
+	resolverMap := fmt.Sprintf("%s\nexport const resolvers = {\n\tMutation: {%s\n\t},\n\tQuery: {%s\n\t},\n}\n", importsStr, mutationMap, queryMap)
+
+	err = ioutil.WriteFile(registerAPIOutputPath, []byte(resolverMap), 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	/**
+	 * Benchmark END
+	 */
+	t := time.Now()
+	elapsed := t.Sub(start)
+	fmt.Printf("[tempo] Time to build %v", elapsed)
+}
+
+/**
+ * Walk tree function
+ */
+func walk(root, walkDir string) (string, []resolver) {
 	skipDirs := []string{".git", "node_modules", "utils"}
 	var allSchemas string
 	var resolvers = []resolver{}
+
+	inputPath, err := filepath.Abs(path.Join(root, walkDir))
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	error := filepath.Walk(inputPath, func(path string, info os.FileInfo, err error) error {
 		// Skip specified skipDirs
@@ -132,10 +196,10 @@ func main() {
 			}
 
 			// Get file/function name and import path for each resolver
-			relPath := fmt.Sprintf("%s", strings.Split(path, projectRootDir)[1])
+			relPath := fmt.Sprintf("%s", strings.Split(path, walkDir)[1])
 			functionName := strings.TrimSuffix(info.Name(), filepath.Ext(info.Name()))
 
-			r := resolver{functionName, filepath.ToSlash(projectRootDir + relPath)}
+			r := resolver{functionName, filepath.ToSlash(walkDir + relPath)}
 			resolvers = append(resolvers, r)
 		}
 
@@ -146,51 +210,5 @@ func main() {
 		panic(error)
 	}
 
-	/**
-	 * Output schema to build dir
-	 */
-	concatinatedSDL := []byte(allSchemas)
-	err = ioutil.WriteFile(schemaOutputPath, concatinatedSDL, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	/**
-	 * Build resolver map (registerAPI)
-	 */
-	// TODO: find relative root dynamically
-	var relativeRoot = "../../"
-	var importsStr = ""
-	var mutationMap = ""
-	var queryMap = ""
-
-	for _, rd := range resolvers {
-		functionName := rd.FunctionName
-		path := rd.FilePath
-
-		importStr := fmt.Sprintf("import %s from \"%s%s\";\n", functionName, relativeRoot, filepath.ToSlash(path))
-		importsStr = importsStr + importStr
-
-		if strings.Contains(path, "mutation") {
-			mutationMap = mutationMap + "\n\t\t" + functionName + ","
-		}
-
-		if strings.Contains(path, "query") {
-			queryMap = queryMap + "\n\t\t" + functionName + ","
-		}
-	}
-
-	resolverMap := fmt.Sprintf("%s\nexport const resolvers = {\n\tMutation: {%s\n\t},\n\tQuery: {%s\n\t},\n}\n", importsStr, mutationMap, queryMap)
-
-	err = ioutil.WriteFile(registerAPIOutputPath, []byte(resolverMap), 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	/**
-	 * Benchmark END
-	 */
-	t := time.Now()
-	elapsed := t.Sub(start)
-	fmt.Printf("[tempo] Time to build %v", elapsed)
+	return allSchemas, resolvers
 }
