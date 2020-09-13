@@ -3,22 +3,31 @@ import commonjs from '@rollup/plugin-commonjs'
 import polyfills from 'rollup-plugin-node-polyfills'
 import json from '@rollup/plugin-json'
 import { terser } from 'rollup-plugin-terser'
-import { buildBinary, run } from './__tempo__/builder.js'
+import child_process from 'child_process'
+import kill from 'tree-kill'
 import pkg from './package.json'
+import { run } from './__tempo__/builder.js'
 
 const production = !process.env.ROLLUP_WATCH
 
-function serve() {
-  let server
+let server
 
+function serve() {
   function toExit() {
-    if (server) server.kill(0)
+    kill(server.pid, 'SIGKILL', (err) => {
+      if (err) {
+        console.log('err:', err)
+      }
+    })
   }
 
   return {
     writeBundle() {
-      if (server) return
-      server = require('child_process').spawn('nodemon', ['-e js,graphql', 'dist/bundle.js', '--ignore __tempo__'], {
+      if (server) {
+        toExit()
+      }
+
+      server = child_process.spawn('node', ['-r esm', 'dist/bundle.js'], {
         stdio: ['ignore', 'inherit', 'inherit'],
         shell: true
       })
@@ -50,16 +59,16 @@ export default {
     file: 'dist/bundle.js',
   },
   plugins: [
-    buildBinary(),
     run(),
+
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In
     // some cases you'll need additional configuration -
     // consult the documentation for details:
     // https://github.com/rollup/plugins/tree/master/packages/commonjs
     polyfills(),
-    resolve(),
     json(),
+    resolve(),
     commonjs(),
 
     // In dev mode, call `npm run start` once

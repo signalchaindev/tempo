@@ -4,7 +4,7 @@ import mongoose from 'mongoose'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import scalars from './scalars'
-import { tempo, watch } from '../__tempo__'
+import { tempo } from '../__tempo__'
 
 const envPath = path.join(process.cwd(), '.env')
 dotenv.config({ path: envPath })
@@ -35,7 +35,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
-watch() // for tempo package dev
 tempo(app, {
   server: {
     resolvers: {
@@ -53,7 +52,7 @@ tempo(app, {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 app.listen({ port }, err => {
   if (err) {
-    console.error('🚨  UNABLE TO START: An error occurred on the sapper server')
+    console.error('🚨  UNABLE TO START: An error occurred starting the server')
     console.error(err.stack)
     process.exit(1)
   }
