@@ -104,8 +104,13 @@ func main() {
 	/**
 	 * Build resolver map (registerAPI)
 	 */
-	// TODO: find relative root dynamically
-	var relativeRoot = "../../"
+	rel, err := filepath.Rel(root, buildDir)
+	if err != nil {
+		log.Fatal("Could not find the relative path of the build directory")
+	}
+	depth := len(strings.Split(rel, string(filepath.Separator)))
+
+	var relativeRoot = strings.Repeat("../", depth)
 	var importsStr = ""
 	var mutationMap = ""
 	var queryMap = ""
@@ -141,6 +146,9 @@ func main() {
 	fmt.Printf("[tempo] Time to build %v", elapsed)
 }
 
+/**
+ * Walk tree function
+ */
 func walk(root, walkDir string) (string, []resolver) {
 	skipDirs := []string{".git", "node_modules", "utils"}
 	var allSchemas string
