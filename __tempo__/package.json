@@ -17,9 +17,10 @@
     "graphql",
     "graphql server framework"
   ],
-  "scripts": {
-    "// TODO": "build CLI"
-  },
+  "files": [
+    ".bin/*",
+    "*.js"
+  ],
   "dependencies": {
     "@graphql-tools/merge": "6.2.2",
     "apollo-server-express": "2.17.0"

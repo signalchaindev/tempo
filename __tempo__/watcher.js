@@ -31,7 +31,7 @@ export function watch() {
    * Watch src directory
    */
   chokidar
-    .watch(['./src/**/*.js', './src/**/*.graphql'], {
+    .watch(['./**/*.js', './**/*.graphql'], {
       ignored: [/node_modules/, /__tempo__/],
     })
     .on('ready', () => {

@@ -16,7 +16,7 @@ export function buildBinary() {
   if (!fs.existsSync(binDir)) {
     fs.mkdirSync(binDir)
   }
-  child_process.exec(`go build -o ${binDir}/${exeName}.exe`, { cwd: devEnv }, cb)
+  child_process.exec(`go build -o ${path.join(binDir, exeName)}.exe`, { cwd: devEnv }, cb)
 }
 
 /**
@@ -26,7 +26,8 @@ export function run() {
   if (!fs.existsSync(buildDir)) {
     fs.mkdirSync(buildDir)
   }
-  child_process.exec(`${exeName} ${process.cwd()}`, { cwd: binDir }, cb)
+  // TODO: pass walk dirs dynamically
+  child_process.exec(`${exeName} ${process.cwd()} src api`, { cwd: binDir }, cb)
 }
 
 /**
