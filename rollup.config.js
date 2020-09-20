@@ -59,7 +59,12 @@ export default {
     file: 'dist/bundle.js',
   },
   plugins: [
-    run(),
+    run({
+      dirs: [
+        'src',
+        'api'
+      ]
+    }),
 
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In

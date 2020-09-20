@@ -19,8 +19,8 @@
   "scripts": {
     "dev": "rollup -c -w",
     "build": "rollup -c",
-    "dev:package": "npm run tempo:build && cross-env PACKAGE_DEV=true nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
-    "tempo:build": "node -r esm __tempo__/builder.js",
+    "dev:package": "npm run tempo:bin && npm run tempo:build && cross-env PACKAGE_DEV=true nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
+    "tempo:build": "node -r esm __tempo__/buildResolvers.js",
     "tempo:bin": "node -r esm __tempo__/buildBinary.js"
   },
   "dependencies": {
