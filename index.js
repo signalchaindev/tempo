@@ -1,3 +1,8 @@
 import { watch } from './__tempo__/watcher.js'
 
-watch()
+watch({
+  dirs: [
+    'src',
+    'api'
+  ]
+})

@@ -22,33 +22,37 @@ func main() {
 	 */
 	start := time.Now()
 	var root string
+	var walkDirs []string
 
-	// ** DEV ONLY ** For calling main.go directly in dev
-	if os.Args == nil {
-		/**
-		 * Get the working directory for the executable
-		 */
-		wd, err := os.Getwd()
-		if err != nil {
-			panic(err)
-		}
+	// if os.Args[0] == "dev" {
+	// 	/**
+	// 	 * Get the working directory for the executable
+	// 	 * ** DEV ONLY ** For calling main.go directly in dev
+	// 	 */
+	// 	wd, err := os.Getwd()
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
 
-		/**
-		 * Find root from the executable's working directory
-		 */
-		root, err = filepath.Abs(path.Join(wd, "../../../"))
-		if err != nil {
-			log.Fatal(err)
-		}
-	}
+	// 	/**
+	// 	 * Find root from the executable's working directory
+	// 	 */
+	// 	root, err = filepath.Abs(path.Join(wd, "../../../"))
+	// 	if err != nil {
+	// 		log.Fatal(err)
+	// 	}
+	// }
 
 	/**
-	 * Another option for getting the root of the working process
-	 * Root of project
-	 * Because we are passing the root of the node process through os.Args, you cannot run this package without specifying a project root path
+	 * Get the root of the process and walk dirs through os.Args
 	 */
 	root = os.Args[1]
-	walkDirs := os.Args[2:]
+	walkDirs = os.Args[2:]
+
+	// Default walkdirs to 'src' dir
+	if len(walkDirs) == 0 {
+		walkDirs = []string{"src"}
+	}
 
 	/**
 	 * Define output directory

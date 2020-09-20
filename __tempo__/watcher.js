@@ -4,7 +4,7 @@ import { buildBinary, run } from './builder.js'
 import child_process from 'child_process'
 import kill from 'tree-kill'
 
-export function watch() {
+export function watch(options) {
   /**
    * Run root server (replaces nodemon)
    */
@@ -19,7 +19,7 @@ export function watch() {
       })
     }
 
-    run()
+    run(options)
 
     server = child_process.spawn('node', ['-r esm', 'src/server.js'], {
       stdio: ['ignore', 'inherit', 'inherit'],
@@ -65,7 +65,7 @@ export function watch() {
       .on('ready', () => {
         console.log(chalk.blue('[tempo] Server is ready'))
         buildBinary()
-        run()
+        run(options)
       })
       .on('change', event => {
         console.log(chalk.blue(`[tempo] Change in ${event}`))

@@ -22,12 +22,16 @@ export function buildBinary() {
 /**
  * Run the Go binary to build the resolver map and type def AST
  */
-export function run() {
+export function run(options) {
+  const opts = {
+    dirs: options && options.dirs ? options.dirs : []
+  }
+
   if (!fs.existsSync(buildDir)) {
     fs.mkdirSync(buildDir)
   }
   // TODO: pass walk dirs dynamically
-  child_process.exec(`${exeName} ${process.cwd()} src api`, { cwd: binDir }, cb)
+  child_process.exec(`${exeName} ${process.cwd()} ${opts.dirs.join(' ')}`, { cwd: binDir }, cb)
 }
 
 /**
