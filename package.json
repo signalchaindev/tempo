@@ -18,8 +18,8 @@
   ],
   "scripts": {
     "dev": "node -r esm index.js",
-    "build": "node -r esm __tempo__/buildResolvers.js",
-    "build:bin": "node -r esm __tempo__/buildBinary.js",
+    "build": "node -r esm __tempo__/package/scripts/buildResolvers.js",
+    "build:bin": "node -r esm __tempo__/package/scripts/buildBinary.js",
     "dev:package": "npm run build:bin && cross-env PACKAGE_DEV=true node -r esm index.js"
   },
   "dependencies": {
