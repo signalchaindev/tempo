@@ -8,7 +8,6 @@ const buildDir = path.join(process.cwd(), '__tempo__', 'build')
 const devEnv = path.join(process.cwd(), '__tempo__', 'package')
 const exeName = 'tempo'
 
-
 /**
  * Build the Go binary
  */
@@ -16,7 +15,11 @@ export function buildBinary() {
   if (!fs.existsSync(binDir)) {
     fs.mkdirSync(binDir)
   }
-  child_process.exec(`go build -o ${path.join(binDir, exeName)}.exe`, { cwd: devEnv }, cb)
+  child_process.exec(
+    `go build -o ${path.join(binDir, exeName)}.exe`,
+    { cwd: devEnv },
+    cb,
+  )
 }
 
 /**
@@ -24,14 +27,18 @@ export function buildBinary() {
  */
 export function run(options) {
   const opts = {
-    dirs: options && options.dirs ? options.dirs : []
+    dirs: options && options.dirs ? options.dirs : [],
   }
 
   if (!fs.existsSync(buildDir)) {
     fs.mkdirSync(buildDir)
   }
-  // TODO: pass walk dirs dynamically
-  child_process.exec(`${exeName} ${process.cwd()} ${opts.dirs.join(' ')}`, { cwd: binDir }, cb)
+
+  child_process.exec(
+    `${exeName} ${process.cwd()} ${opts.dirs.join(' ')}`,
+    { cwd: binDir },
+    cb,
+  )
 }
 
 /**
