@@ -123,7 +123,7 @@ func main() {
 		functionName := rd.FunctionName
 		path := rd.FilePath
 
-		importStr := fmt.Sprintf("import %s from \"%s%s\";\n", functionName, relativeRoot, filepath.ToSlash(path))
+		importStr := fmt.Sprintf("import { %s } from \"%s%s\";\n", functionName, relativeRoot, filepath.ToSlash(path))
 		importsStr = importsStr + importStr
 
 		if strings.Contains(path, "mutation") {

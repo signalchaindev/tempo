@@ -1,3 +1,3 @@
-export default function test() {
+export function connectApi() {
   return 'Successfully connected api!'
 }

@@ -1,6 +1,6 @@
 import chokidar from 'chokidar'
 import chalk from 'chalk'
-import { buildBinary, run } from './builder.js'
+import { buildBinary, run } from './package/builder.js'
 import child_process from 'child_process'
 import kill from 'tree-kill'
 
@@ -12,7 +12,7 @@ export function watch(options) {
 
   function serve() {
     if (server) {
-      kill(server.pid, 'SIGKILL', (err) => {
+      kill(server.pid, 'SIGKILL', err => {
         if (err) {
           console.log('err:', err)
         }
@@ -23,7 +23,7 @@ export function watch(options) {
 
     server = child_process.spawn('node', ['-r esm', 'src/server.js'], {
       stdio: ['ignore', 'inherit', 'inherit'],
-      shell: true
+      shell: true,
     })
   }
 
@@ -60,7 +60,7 @@ export function watch(options) {
   if (process.env.PACKAGE_DEV) {
     chokidar
       .watch(['./__tempo__/**/*.js', './__tempo__/**/*.go'], {
-        ignored: ['./__tempo__/.bin/**/*', './__tempo__/build/**/*']
+        ignored: ['./__tempo__/.bin/**/*', './__tempo__/build/**/*'],
       })
       .on('ready', () => {
         console.log(chalk.blue('[tempo] Server is ready'))
