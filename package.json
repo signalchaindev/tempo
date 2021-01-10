@@ -18,9 +18,9 @@
   ],
   "scripts": {
     "dev": "node -r esm index.js",
-    "build": "node -r esm __tempo__/package/scripts/buildResolvers.js",
-    "build:bin": "node -r esm __tempo__/package/scripts/buildBinary.js",
-    "dev:package": "npm run build:bin && cross-env PACKAGE_DEV=true node -r esm index.js"
+    "dev:package": "npm run build:bin && npm run build && cross-env PACKAGE_DEV=true node -r esm index.js",
+    "build": "cross-env NODE_ENV=production node -r esm __tempo__/package/scripts/buildResolvers.js",
+    "build:bin": "cross-env NODE_ENV=production node -r esm __tempo__/package/scripts/buildBinary.js"
   },
   "dependencies": {
     "cors": "2.8.5",

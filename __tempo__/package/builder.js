@@ -1,10 +1,10 @@
 import fs from 'fs'
 import path from 'path'
-import chalk from 'chalk'
+import os from 'os'
 import child_process from 'child_process'
+import chalk from 'chalk'
 
 const binDir = path.join(process.cwd(), '__tempo__', '.bin')
-const buildDir = path.join(process.cwd(), '__tempo__', 'build')
 const devEnv = path.join(process.cwd(), '__tempo__', 'package')
 const exeName = 'tempo'
 
@@ -15,11 +15,36 @@ export function buildBinary() {
   if (!fs.existsSync(binDir)) {
     fs.mkdirSync(binDir)
   }
+
   child_process.exec(
     `go build -o ${path.join(binDir, exeName)}.exe`,
     { cwd: devEnv },
     cb,
   )
+
+  if (process.env.NODE_ENV === 'production') {
+    // TODO: Test that binaries are being built for all supported operating systems
+    // https://www.digitalocean.com/community/tutorials/how-to-build-go-executables-for-multiple-platforms-on-ubuntu-16-04#step-4-%E2%80%94-building-executables-for-different-architectures
+
+    // Windows - win32
+    child_process.exec(
+      `env GOOS=windows GOARCH=386 go build -o ${binDir}/win32/${exeName}.exe`,
+      { cwd: devEnv },
+      cb,
+    )
+    // Windows - win64
+    child_process.exec(
+      `env GOOS=windows GOARCH=amd64 go build -o ${binDir}/win64/${exeName}.exe`,
+      { cwd: devEnv },
+      cb,
+    )
+    // Mac - darwin
+    child_process.exec(
+      `env GOOS=darwin GOARCH=amd64 go build -o ${binDir}/darwin/${exeName}`,
+      { cwd: devEnv },
+      cb,
+    )
+  }
 }
 
 /**
@@ -30,8 +55,13 @@ export function run(options) {
     dirs: options && options.dirs ? options.dirs : [],
   }
 
-  if (!fs.existsSync(buildDir)) {
-    fs.mkdirSync(buildDir)
+  if (process.env.NODE_ENV === 'production') {
+    child_process.exec(
+      `${exeName} ${process.cwd()}  ${opts.dirs.join(' ')}`,
+      { cwd: `${binDir}/${os.platform()}` },
+      cb,
+    )
+    return
   }
 
   child_process.exec(
