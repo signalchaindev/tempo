@@ -20,8 +20,8 @@
     "dev": "rollup -c -w",
     "build": "rollup -c",
     "dev:package": "npm run tempo:bin && npm run tempo:build && cross-env PACKAGE_DEV=true nodemon -r esm -e js,graphql src/server.js --ignore __tempo__",
-    "tempo:build": "node -r esm __tempo__/buildResolvers.js",
-    "tempo:bin": "node -r esm __tempo__/buildBinary.js"
+    "tempo:build": "cross-env NODE_ENV=production node -r esm __tempo__/package/scripts/buildResolvers.js",
+    "tempo:bin": "cross-env NODE_ENV=production node -r esm __tempo__/package/scripts/buildBinary.js"
   },
   "dependencies": {
     "apollo-server-express": "2.17.0",

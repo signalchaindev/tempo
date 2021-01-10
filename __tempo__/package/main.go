@@ -17,10 +17,9 @@ type resolver struct {
 }
 
 func main() {
-	/**
-	 * Benchmark start
-	 */
+	// Start benchmark
 	start := time.Now()
+
 	var root string
 	var walkDirs []string
 
@@ -123,7 +122,7 @@ func main() {
 		functionName := rd.FunctionName
 		path := rd.FilePath
 
-		importStr := fmt.Sprintf("import %s from \"%s%s\";\n", functionName, relativeRoot, filepath.ToSlash(path))
+		importStr := fmt.Sprintf("import { %s } from \"%s%s\";\n", functionName, relativeRoot, filepath.ToSlash(path))
 		importsStr = importsStr + importStr
 
 		if strings.Contains(path, "mutation") {
@@ -142,12 +141,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	/**
-	 * Benchmark END
-	 */
-	t := time.Now()
-	elapsed := t.Sub(start)
-	fmt.Printf("[tempo] Time to build %v", elapsed)
+	// Print Benchmark
+	fmt.Printf("[tempo] Time to build %v", time.Now().Sub(start))
 }
 
 /**
