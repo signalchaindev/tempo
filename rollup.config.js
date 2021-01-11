@@ -6,7 +6,7 @@ import { terser } from 'rollup-plugin-terser'
 import child_process from 'child_process'
 import kill from 'tree-kill'
 import pkg from './package.json'
-import { run } from './__tempo__/package/builder.js'
+import tempo from './__tempo__/index.js'
 
 const dev = process.env.ROLLUP_WATCH
 
@@ -50,7 +50,7 @@ const onwarn = (warning, onwarn) => {
   )
 }
 
-export default {
+const server = {
   input: 'src/server.js',
   output: {
     sourcemap: true,
@@ -59,7 +59,7 @@ export default {
     file: 'dist/bundle.js',
   },
   plugins: [
-    run({
+    tempo({
       dev,
       dirs: ['src', 'api'],
     }),
@@ -69,10 +69,7 @@ export default {
     resolve(),
     commonjs(),
 
-    // In dev mode, call `npm run start` once
-    // the bundle has been generated
     dev && serve(),
-
     !dev &&
       terser({
         module: true,
@@ -89,3 +86,5 @@ export default {
     exclude: ['node_modules/**', '__tempo__/**/*'],
   },
 }
+
+export default server

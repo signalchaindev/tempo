@@ -1,3 +1,3 @@
 export function testConnection() {
-  return 'Success!'
+  return 'Successfully tested the connection!'
 }
