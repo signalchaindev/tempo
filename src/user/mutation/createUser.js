@@ -1,6 +1,6 @@
 import { User } from '../model.js'
 
-export default function createUser(_, args) {
+export function createUser(_, args) {
   const user = {
     name: args.name || 'James',
     email: args.email || 'james@mail.com',

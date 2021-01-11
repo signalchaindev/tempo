@@ -1,9 +1,9 @@
-export default function getAllProducts() {
+export function getAllProducts() {
   return [
     {
-      id: "123456",
-      name: "Product 1",
-      price: 100
-    }
+      id: '123456',
+      name: 'Product 1',
+      price: 100,
+    },
   ]
 }

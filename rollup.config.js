@@ -6,15 +6,15 @@ import { terser } from 'rollup-plugin-terser'
 import child_process from 'child_process'
 import kill from 'tree-kill'
 import pkg from './package.json'
-import { run } from './__tempo__/builder.js'
+import { run } from './__tempo__/package/builder.js'
 
-const production = !process.env.ROLLUP_WATCH
-
-let server
+const dev = process.env.ROLLUP_WATCH
 
 function serve() {
+  let server
+
   function toExit() {
-    kill(server.pid, 'SIGKILL', (err) => {
+    kill(server.pid, 'SIGKILL', err => {
       if (err) {
         console.log('err:', err)
       }
@@ -29,12 +29,12 @@ function serve() {
 
       server = child_process.spawn('node', ['-r esm', 'dist/bundle.js'], {
         stdio: ['ignore', 'inherit', 'inherit'],
-        shell: true
+        shell: true,
       })
 
       process.on('SIGTERM', toExit)
       process.on('exit', toExit)
-    }
+    },
   }
 }
 
@@ -60,17 +60,10 @@ export default {
   },
   plugins: [
     run({
-      dirs: [
-        'src',
-        'api'
-      ]
+      dev,
+      dirs: ['src', 'api'],
     }),
 
-    // If you have external dependencies installed from
-    // npm, you'll most likely need these plugins. In
-    // some cases you'll need additional configuration -
-    // consult the documentation for details:
-    // https://github.com/rollup/plugins/tree/master/packages/commonjs
     polyfills(),
     json(),
     resolve(),
@@ -78,11 +71,12 @@ export default {
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
-    !production && serve(),
+    dev && serve(),
 
-    // If we're building for production (npm run build
-    // instead of npm run dev), minify
-    production && terser()
+    !dev &&
+      terser({
+        module: true,
+      }),
   ],
   external: Object.keys(pkg.dependencies).concat(
     require('module').builtinModules || Object.keys(process.binding('natives')),
@@ -92,6 +86,6 @@ export default {
   onwarn,
   watch: {
     clearScreen: false,
-    exclude: ['node_modules/**', '__tempo__/**/*']
-  }
+    exclude: ['node_modules/**', '__tempo__/**/*'],
+  },
 }

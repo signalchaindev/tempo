@@ -1,5 +1,5 @@
-const { GraphQLScalarType } = require('graphql')
-const { Kind } = require('graphql/language')
+import { GraphQLScalarType } from 'graphql'
+import { Kind } from 'graphql/language'
 
 export default {
   Date: new GraphQLScalarType({

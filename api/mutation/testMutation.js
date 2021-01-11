@@ -1,3 +1,3 @@
-export default function test() {
+export function testMutation() {
   return 'Successfully tested mut!'
 }

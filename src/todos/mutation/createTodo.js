@@ -1,3 +1,3 @@
-export default function createTodo() {
+export function createTodo() {
   return { successMessage: 'Great success!' }
 }

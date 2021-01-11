@@ -45,7 +45,7 @@ tempo(app, {
   middleware: {
     path: `/${gqlServerPath}`, // default = /__graphql
     cors: corsOptions, // Optional = CORS
-  }
+  },
 })
 
 // Start app
